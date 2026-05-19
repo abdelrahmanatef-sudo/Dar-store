@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dar Store | كل ما يحتاجه البيت</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236B4F3A'/><text y='75' font-size='65' x='50%' text-anchor='middle' font-family='serif'>🏠</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--brown:#6B4F3A;--gold:#B87333;--cream:#EFE6DC;--dark:#2B2B2B}
+body{font-family:'Tajawal',sans-serif;background:#130905;color:var(--cream);overflow-x:hidden}
+nav{position:fixed;top:0;width:100%;z-index:1000;background:rgba(19,9,5,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(184,115,51,0.25);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:70px}
+.logo{font-family:'Amiri',serif;font-size:2.2rem;font-weight:700;background:linear-gradient(135deg,#EFE6DC,#B87333);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{text-decoration:none;color:rgba(239,230,220,0.7);font-size:0.93rem;font-weight:500;transition:all 0.3s}
+.nav-links a:hover{color:var(--gold);text-shadow:0 0 15px rgba(184,115,51,0.8)}
+.cart-btn{background:linear-gradient(135deg,var(--brown),var(--gold));color:var(--cream);border:none;padding:10px 24px;border-radius:30px;font-family:'Tajawal',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(184,115,51,0.35);transition:all 0.3s}
+.cart-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(184,115,51,0.55)}
+.hero{min-height:100vh;position:relative;display:flex;align-items:center;padding:110px 5% 60px;overflow:hidden}
+.grid-bg{position:absolute;inset:0;background:linear-gradient(rgba(184,115,51,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(184,115,51,0.04) 1px,transparent 1px);background-size:55px 55px;transform:perspective(600px) rotateX(25deg) scaleY(1.8);transform-origin:bottom;opacity:0.7}
+.glow-orb{position:absolute;border-radius:50%;animation:pulseOrb 5s ease-in-out infinite}
+.glow-orb.one{width:500px;height:500px;top:10%;left:35%;background:radial-gradient(circle,rgba(184,115,51,0.12) 0%,transparent 70%)}
+.glow-orb.two{width:300px;height:300px;bottom:10%;left:10%;background:radial-gradient(circle,rgba(107,79,58,0.1) 0%,transparent 70%);animation-delay:2s}
+@keyframes pulseOrb{0%,100%{transform:scale(1);opacity:0.7}50%{transform:scale(1.3);opacity:1}}
+.hero-content{flex:1;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(184,115,51,0.12);border:1px solid rgba(184,115,51,0.35);color:var(--gold);padding:8px 20px;border-radius:30px;font-size:0.84rem;font-weight:600;margin-bottom:2rem;animation:fadeUp 0.8s ease both}
+.hero h1{font-family:'Amiri',serif;font-size:clamp(3.5rem,7vw,6rem);line-height:1.1;animation:fadeUp 0.9s ease 0.1s both}
+.grad-text{background:linear-gradient(135deg,#EFE6DC 0%,#B87333 50%,#6B4F3A 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 25px rgba(184,115,51,0.35))}
+.hero h1 .sub{display:block;font-size:0.42em;color:rgba(239,230,220,0.55);-webkit-text-fill-color:rgba(239,230,220,0.55);letter-spacing:4px;margin-top:0.3rem}
+.hero-desc{font-size:1.08rem;color:rgba(239,230,220,0.6);line-height:1.8;max-width:480px;margin:1.5rem 0 2.5rem;animation:fadeUp 1s ease 0.2s both}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp 1s ease 0.3s both}
+.btn-3d{position:relative;background:linear-gradient(135deg,var(--brown),var(--gold));color:var(--cream);border:none;padding:15px 36px;border-radius:14px;font-family:'Tajawal',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;box-shadow:0 8px 0 #2a1508,0 12px 30px rgba(184,115,51,0.4);transition:all 0.15s;transform:translateY(0)}
+.btn-3d:hover{transform:translateY(4px);box-shadow:0 4px 0 #2a1508,0 6px 20px rgba(184,115,51,0.35)}
+.btn-3d:active{transform:translateY(8px);box-shadow:0 0 0 #2a1508}
+.btn-ghost{background:transparent;color:var(--cream);border:1px solid rgba(239,230,220,0.25);padding:14px 30px;border-radius:14px;font-family:'Tajawal',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;backdrop-filter:blur(10px);transition:all 0.3s}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);box-shadow:0 0 20px rgba(184,115,51,0.2)}
+.hero-visual{flex:1;display:flex;justify-content:center;align-items:center;z-index:2;animation:fadeLeft 1s ease 0.3s both}
+.card3d-wrap{perspective:900px;position:relative}
+.card3d{width:290px;background:rgba(107,79,58,0.12);border:1px solid rgba(184,115,51,0.28);border-radius:24px;padding:28px;backdrop-filter:blur(20px);box-shadow:0 30px 60px rgba(0,0,0,0.55),inset 0 1px 0 rgba(239,230,220,0.08);transform-style:preserve-3d;animation:float3d 6s ease-in-out infinite;position:relative}
+.card3d::before{content:'';position:absolute;inset:0;border-radius:24px;background:linear-gradient(135deg,rgba(239,230,220,0.06) 0%,transparent 60%);pointer-events:none}
+@keyframes float3d{0%,100%{transform:rotateY(-8deg) rotateX(5deg) translateY(0)}33%{transform:rotateY(8deg) rotateX(-3deg) translateY(-15px)}66%{transform:rotateY(-5deg) rotateX(8deg) translateY(-8px)}}
+.card3d-emoji{font-size:3.8rem;margin-bottom:1rem;display:block}
+.card3d h3{font-family:'Amiri',serif;font-size:1.25rem;color:var(--cream);margin-bottom:4px}
+.card3d p{color:rgba(239,230,220,0.45);font-size:0.82rem}
+.card3d-footer{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(184,115,51,0.2)}
+.card3d-price{font-size:1.4rem;font-weight:800;color:var(--gold)}
+.card3d-add{width:40px;height:40px;background:linear-gradient(135deg,var(--brown),var(--gold));color:white;border:none;border-radius:12px;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(184,115,51,0.4);transition:all 0.3s}
+.card3d-add:hover{transform:scale(1.12) rotate(90deg)}
+.badge-float{position:absolute;background:rgba(19,9,5,0.92);border:1px solid rgba(184,115,51,0.35);border-radius:14px;padding:10px 15px;backdrop-filter:blur(10px);font-size:0.78rem;color:var(--cream);box-shadow:0 10px 30px rgba(0,0,0,0.45)}
+.badge-float.a{top:-22px;left:-38px;animation:fb1 4s ease-in-out infinite}
+.badge-float.b{bottom:-18px;right:-28px;animation:fb2 5s ease-in-out infinite}
+@keyframes fb1{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+@keyframes fb2{0%,100%{transform:translateY(0) rotate(2deg)}50%{transform:translateY(-8px) rotate(-2deg)}}
+.hero-stats{display:flex;gap:2.5rem;margin-top:3rem;animation:fadeUp 1s ease 0.45s both}
+.stat-v{font-family:'Amiri',serif;font-size:2.1rem;font-weight:700;background:linear-gradient(135deg,var(--cream),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-l{font-size:0.8rem;color:rgba(239,230,220,0.45)}
+section{padding:90px 5%}
+.s-label{font-size:0.78rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem}
+.s-title{font-family:'Amiri',serif;font-size:clamp(2rem,3.5vw,2.8rem);background:linear-gradient(135deg,var(--cream),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:3rem}
+.cats-section{background:linear-gradient(180deg,#130905 0%,#0c0603 100%)}
+.cats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.cat-card{background:rgba(107,79,58,0.08);border:1px solid rgba(184,115,51,0.15);border-radius:20px;padding:2rem 1.5rem;text-align:center;cursor:pointer;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);position:relative;overflow:hidden;transform-style:preserve-3d}
+.cat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(184,115,51,0.12) 0%,transparent 60%);opacity:0;transition:opacity 0.3s;border-radius:20px}
+.cat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--brown),var(--gold));transform:scaleX(0);transition:transform 0.3s}
+.cat-card:hover{transform:translateY(-12px) rotateX(6deg);border-color:rgba(184,115,51,0.5);box-shadow:0 24px 50px rgba(0,0,0,0.45),0 0 30px rgba(184,115,51,0.08)}
+.cat-card:hover::before{opacity:1}
+.cat-card:hover::after{transform:scaleX(1)}
+.cat-icon{width:68px;height:68px;background:rgba(184,115,51,0.12);border:1px solid rgba(184,115,51,0.25);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1rem;transition:all 0.35s;box-shadow:0 8px 20px rgba(0,0,0,0.3)}
+.cat-card:hover .cat-icon{background:rgba(184,115,51,0.25);transform:rotateY(15deg) scale(1.12);box-shadow:0 12px 30px rgba(184,115,51,0.25)}
+.cat-card h3{color:var(--cream);font-weight:700;margin-bottom:4px}
+.cat-card p{color:rgba(239,230,220,0.45);font-size:0.8rem}
+.products-section{background:#0c0603}
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.prod-card{background:rgba(107,79,58,0.07);border:1px solid rgba(184,115,51,0.12);border-radius:20px;overflow:hidden;transition:all 0.4s ease;cursor:pointer;transform-style:preserve-3d}
+.prod-card:hover{transform:translateY(-10px) rotateX(4deg);border-color:rgba(184,115,51,0.45);box-shadow:0 25px 50px rgba(0,0,0,0.5),0 0 40px rgba(184,115,51,0.06)}
+.prod-img{width:100%;height:175px;background:linear-gradient(135deg,rgba(107,79,58,0.25) 0%,rgba(19,9,5,0.75) 100%);display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative;overflow:hidden}
+.prod-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(12,6,3,0.75) 100%)}
+.prod-badge{position:absolute;top:12px;right:12px;z-index:2;background:linear-gradient(135deg,var(--brown),var(--gold));color:white;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:10px;box-shadow:0 4px 12px rgba(184,115,51,0.4)}
+.prod-badge.sale{background:linear-gradient(135deg,#7a0000,#c0392b)}
+.prod-info{padding:1rem}
+.prod-cat{font-size:0.7rem;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+.prod-info h3{color:var(--cream);font-weight:700;margin-bottom:3px;font-size:0.93rem}
+.prod-info .desc{font-size:0.78rem;color:rgba(239,230,220,0.4);line-height:1.5;margin-bottom:0.9rem}
+.prod-footer{display:flex;justify-content:space-between;align-items:center}
+.prod-price{font-size:1.12rem;font-weight:800;color:var(--gold)}
+.prod-price small{font-size:0.78rem;font-weight:400}
+.prod-add{width:36px;height:36px;background:linear-gradient(135deg,var(--brown),var(--gold));color:white;border:none;border-radius:10px;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(184,115,51,0.38);transition:all 0.3s}
+.prod-add:hover{transform:scale(1.15) rotate(90deg)}
+.promo{margin:0 5% 90px;border-radius:28px;background:linear-gradient(135deg,#3a2010 0%,#130905 50%,#291608 100%);border:1px solid rgba(184,115,51,0.28);padding:60px 8%;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,0.5),inset 0 1px 0 rgba(239,230,220,0.04)}
+.promo::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(184,115,51,0.18) 0%,transparent 70%);border-radius:50%;animation:pulseOrb 5s ease-in-out infinite}
+.promo-content{z-index:2}
+.promo-tag{display:inline-block;background:linear-gradient(135deg,var(--brown),var(--gold));color:white;font-size:1.7rem;font-weight:800;padding:8px 20px;border-radius:14px;margin-bottom:1rem;box-shadow:0 6px 20px rgba(184,115,51,0.4)}
+.promo h2{font-family:'Amiri',serif;font-size:clamp(1.8rem,3vw,2.6rem);color:var(--cream);margin-bottom:0.5rem}
+.promo p{color:rgba(239,230,220,0.6);margin-bottom:1.5rem;font-size:1rem;line-height:1.6}
+.promo-emoji{font-size:5rem;z-index:2;opacity:0.9;animation:fb1 4s ease-in-out infinite}
+.features-section{background:linear-gradient(180deg,#0c0603 0%,#130905 100%)}
+.features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem}
+.feat-item{text-align:center;padding:2rem 1rem;background:rgba(107,79,58,0.06);border:1px solid rgba(184,115,51,0.1);border-radius:20px;transition:all 0.35s}
+.feat-item:hover{transform:translateY(-8px);border-color:rgba(184,115,51,0.35);box-shadow:0 20px 40px rgba(0,0,0,0.35)}
+.feat-icon{width:64px;height:64px;background:rgba(184,115,51,0.12);border:1px solid rgba(184,115,51,0.25);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem;box-shadow:0 8px 20px rgba(0,0,0,0.25)}
+.feat-item h3{color:var(--cream);font-weight:700;margin-bottom:6px}
+.feat-item p{font-size:0.84rem;color:rgba(239,230,220,0.45);line-height:1.6}
+.test-section{background:#0c0603}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.test-card{background:rgba(107,79,58,0.08);border:1px solid rgba(184,115,51,0.12);border-radius:20px;padding:1.8rem;transition:all 0.35s}
+.test-card:hover{transform:translateY(-6px);border-color:rgba(184,115,51,0.35);box-shadow:0 20px 40px rgba(0,0,0,0.35)}
+.test-stars{color:var(--gold);margin-bottom:1rem;font-size:1rem}
+.test-text{font-size:0.9rem;color:rgba(239,230,220,0.65);line-height:1.75;margin-bottom:1.5rem;font-style:italic}
+.test-author{display:flex;align-items:center;gap:12px}
+.test-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--brown),var(--gold));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:1rem}
+.test-name{font-weight:700;color:var(--cream);font-size:0.88rem}
+.test-loc{font-size:0.76rem;color:rgba(239,230,220,0.45)}
+.newsletter-section{background:#130905;text-align:center}
+.nl-box{max-width:560px;margin:0 auto}
+.nl-box h2{font-family:'Amiri',serif;font-size:2.2rem;background:linear-gradient(135deg,var(--cream),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.75rem}
+.nl-box p{color:rgba(239,230,220,0.5);margin-bottom:2rem;line-height:1.6}
+.nl-form{display:flex;overflow:hidden;border-radius:50px;border:1px solid rgba(184,115,51,0.35);background:rgba(107,79,58,0.1);backdrop-filter:blur(10px)}
+.nl-form input{flex:1;border:none;outline:none;padding:14px 20px;font-family:'Tajawal',sans-serif;font-size:0.95rem;background:transparent;color:var(--cream)}
+.nl-form input::placeholder{color:rgba(239,230,220,0.35)}
+.nl-form button{background:linear-gradient(135deg,var(--brown),var(--gold));color:var(--cream);border:none;padding:0 28px;font-family:'Tajawal',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;transition:opacity 0.3s;white-space:nowrap}
+.nl-form button:hover{opacity:0.88}
+footer{background:#080402;padding:60px 5% 30px;border-top:1px solid rgba(184,115,51,0.12)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-logo{font-family:'Amiri',serif;font-size:2rem;font-weight:700;background:linear-gradient(135deg,var(--cream),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1rem;display:block}
+.footer-brand p{color:rgba(239,230,220,0.4);font-size:0.87rem;line-height:1.7;margin-bottom:1.5rem}
+.socials{display:flex;gap:10px}
+.soc{width:38px;height:38px;border:1px solid rgba(184,115,51,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--cream);font-size:1rem;transition:all 0.3s}
+.soc:hover{background:linear-gradient(135deg,var(--brown),var(--gold));border-color:transparent;box-shadow:0 4px 15px rgba(184,115,51,0.35)}
+.footer-col h4{font-weight:700;margin-bottom:1.2rem;color:var(--cream);font-size:1rem}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:0.6rem}
+.footer-col ul li a{color:rgba(239,230,220,0.45);text-decoration:none;font-size:0.86rem;transition:color 0.3s}
+.footer-col ul li a:hover{color:var(--gold)}
+.footer-bottom{border-top:1px solid rgba(184,115,51,0.1);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center}
+.footer-bottom p{font-size:0.8rem;color:rgba(239,230,220,0.3)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeLeft{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:translateX(0)}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.65s ease,transform 0.65s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@media(max-width:900px){
+  .cats-grid,.products-grid,.features-grid{grid-template-columns:repeat(2,1fr)}
+  .test-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .hero{flex-direction:column;text-align:center}
+  .hero-btns,.hero-stats{justify-content:center}
+  .hero-desc{margin:1rem auto}
+  .hero-visual{margin-top:3rem}
+  .nav-links{display:none}
+  .promo{flex-direction:column;text-align:center;gap:2rem}
+}
+@media(max-width:520px){
+  .cats-grid,.products-grid,.features-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">دار</div>
+  <ul class="nav-links">
+    <li><a href="#cats">الأقسام</a></li>
+    <li><a href="#products">المنتجات</a></li>
+    <li><a href="#about">من نحن</a></li>
+    <li><a href="#contact">تواصل معنا</a></li>
+  </ul>
+  <button class="cart-btn">🛒 السلة (3)</button>
+</nav>
+
+<section class="hero">
+  <div class="grid-bg"></div>
+  <div class="glow-orb one"></div>
+  <div class="glow-orb two"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✨ وصل جديد لهذا الموسم</div>
+    <h1>
+      <span class="grad-text">دار</span>
+      <span class="sub">كل ما يحتاجه البيت</span>
+    </h1>
+    <p class="hero-desc">اكتشف أجمل منتجات المنزل من أدوات المطبخ والديكور والأثاث بجودة عالية وأسعار تناسبك</p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-3d">تسوق الآن</a>
+      <a href="#cats" class="btn-ghost">استعرض الأقسام</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-v">+500</div><div class="stat-l">منتج متنوع</div></div>
+      <div><div class="stat-v">+12K</div><div class="stat-l">عميل سعيد</div></div>
+      <div><div class="stat-v">4.9 ⭐</div><div class="stat-l">تقييم العملاء</div></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="card3d-wrap">
+      <div class="badge-float a">🍳 أدوات المطبخ</div>
+      <div class="card3d">
+        <span class="card3d-emoji">🏺</span>
+        <h3>طقم أواني فخارية</h3>
+        <p>أدوات المطبخ • طقم كامل</p>
+        <div class="card3d-footer">
+          <span class="card3d-price">٢٨٥ ج.م</span>
+          <button class="card3d-add" onclick="this.textContent='✓';setTimeout(()=>this.textContent='+',1200)">+</button>
+        </div>
+      </div>
+      <div class="badge-float b">🚚 توصيل سريع</div>
+    </div>
+  </div>
+</section>
+
+<section class="cats-section" id="cats">
+  <div class="s-label reveal">أقسامنا</div>
+  <div class="s-title reveal">تصفح حسب القسم</div>
+  <div class="cats-grid">
+    <div class="cat-card reveal"><div class="cat-icon">🍳</div><h3>أدوات المطبخ</h3><p>أكثر من ١٥٠ منتج</p></div>
+    <div class="cat-card reveal"><div class="cat-icon">🛋️</div><h3>أثاث المنزل</h3><p>أكثر من ٨٠ منتج</p></div>
+    <div class="cat-card reveal"><div class="cat-icon">🕯️</div><h3>الديكور والإكسسوار</h3><p>أكثر من ١٢٠ منتج</p></div>
+    <div class="cat-card reveal"><div class="cat-icon">🧴</div><h3>العناية بالمنزل</h3><p>أكثر من ٩٠ منتج</p></div>
+  </div>
+</section>
+
+<section class="products-section" id="products">
+  <div class="s-label reveal">منتجاتنا</div>
+  <div class="s-title reveal">الأكثر مبيعاً</div>
+  <div class="products-grid">
+    <div class="prod-card reveal"><div class="prod-img">🫙<span class="prod-badge">جديد</span></div><div class="prod-info"><div class="prod-cat">الديكور</div><h3>طقم مزهريات سيراميك</h3><p class="desc">٣ مزهريات بتصميم أنيق مثالي لجميع الأذواق</p><div class="prod-footer"><span class="prod-price">١٢٠ <small>ج.م</small></span><button class="prod-add" onclick="this.textContent='✓';setTimeout(()=>this.textContent='+',1200)">+</button></div></div></div>
+    <div class="prod-card reveal"><div class="prod-img">🔪<span class="prod-badge sale">خصم</span></div><div class="prod-info"><div class="prod-cat">أدوات المطبخ</div><h3>طقم سكاكين مطبخ</h3><p class="desc">٥ سكاكين ستانلس ستيل مع حامل خشبي</p><div class="prod-footer"><span class="prod-price">٣٥٠ <small>ج.م</small></span><button class="prod-add" onclick="this.textContent='✓';setTimeout(()=>this.textContent='+',1200)">+</button></div></div></div>
+    <div class="prod-card reveal"><div class="prod-img">🕯️</div><div class="prod-info"><div class="prod-cat">الديكور</div><h3>طقم شموع عطرية</h3><p class="desc">شموع طبيعية بروائح منعشة تملأ المنزل بالحيوية</p><div class="prod-footer"><span class="prod-price">٨٥ <small>ج.م</small></span><button class="prod-add" onclick="this.textContent='✓';setTimeout(()=>this.textContent='+',1200)">+</button></div></div></div>
+    <div class="prod-card reveal"><div class="prod-img">🪴</div><div class="prod-info"><div class="prod-cat">الديكور</div><h3>أصص نباتات فخارية</h3><p class="desc">أصص بأحجام مختلفة لجميع أنواع النباتات</p><div class="prod-footer"><span class="prod-price">٦٥ <small>ج.م</small></span><button class="prod-add" onclick="this.textContent='✓';setTimeout(()=>this.textContent='+',1200)">+</button></div></div></div>
+    <div class="prod-card reveal"><div class="prod-img">☕</div><div class="prod-info"><div class="prod-cat">أدوات المطبخ</div><h3>طقم أكواب قهوة</h3><p class="desc">٦ أكواب سيراميك مزخرف بتصميمات تراثية جميلة</p><div class="prod-footer"><span class="prod-price">١٩٥ <small>ج.م</small></span><button class="prod-add" onclick="this.textContent='✓';setTimeout(()=>this.textContent='+',1200)">+</button></div></div></div>
+    <div class="prod-card reveal"><div class="prod-img">🪞</div><div class="prod-info"><div class="prod-cat">الديكور</div><h3>مرايا ديكور خشبية</h3><p class="desc">إطارات خشبية طبيعية تضيف لمسة دافئة للمنزل</p><div class="prod-footer"><span class="prod-price">٤٢٠ <small>ج.م</small></span><button class="prod-add" onclick="this.textContent='✓';setTimeout(()=>this.textContent='+',1200)">+</button></div></div></div>
+    <div class="prod-card reveal"><div class="prod-img">🛁<span class="prod-badge">جديد</span></div><div class="prod-info"><div class="prod-cat">العناية بالمنزل</div><h3>طقم مناشف فاخرة</h3><p class="desc">مناشف قطن ١٠٠٪ ناعمة ومتينة بألوان متعددة</p><div class="prod-footer"><span class="prod-price">١٦٠ <small>ج.م</small></span><button class="prod-add" onclick="this.textContent='✓';setTimeout(()=>this.textContent='+',1200)">+</button></div></div></div>
+    <div class="prod-card reveal"><div class="prod-img">🪵</div><div class="prod-info"><div class="prod-cat">أدوات المطبخ</div><h3>لوح تقطيع خشب زيتون</h3><p class="desc">لوح طبيعي من خشب الزيتون متين وصحي</p><div class="prod-footer"><span class="prod-price">٢٣٠ <small>ج.م</small></span><button class="prod-add" onclick="this.textContent='✓';setTimeout(()=>this.textContent='+',1200)">+</button></div></div></div>
+  </div>
+  <div style="text-align:center;margin-top:3rem"><a href="#" class="btn-ghost">عرض جميع المنتجات ←</a></div>
+</section>
+
+<div class="promo reveal">
+  <div class="promo-content">
+    <div class="promo-tag">خصم ٣٠٪</div>
+    <h2>عروض نهاية الموسم 🎉</h2>
+    <p>استمتع بأكبر تخفيضات على منتجات المنزل المختارة<br>لفترة محدودة فقط</p>
+    <a href="#" class="btn-3d">اشترِ الآن</a>
+  </div>
+  <div class="promo-emoji">🏺🕯️🪴</div>
+</div>
+
+<section class="features-section" id="about">
+  <div class="s-label reveal">لماذا دار؟</div>
+  <div class="s-title reveal">مزايا التسوق معنا</div>
+  <div class="features-grid">
+    <div class="feat-item reveal"><div class="feat-icon">🚚</div><h3>توصيل سريع</h3><p>توصيل لجميع محافظات مصر خلال ٢-٥ أيام عمل</p></div>
+    <div class="feat-item reveal"><div class="feat-icon">✅</div><h3>جودة مضمونة</h3><p>كل منتج يمر بمعايير جودة صارمة قبل الشحن</p></div>
+    <div class="feat-item reveal"><div class="feat-icon">↩️</div><h3>استرجاع سهل</h3><p>سياسة استرجاع مرنة خلال ١٤ يوم من الاستلام</p></div>
+    <div class="feat-item reveal"><div class="feat-icon">💬</div><h3>دعم ٢٤/٧</h3><p>فريق خدمة عملاء متاح على مدار الساعة</p></div>
+  </div>
+</section>
+
+<section class="test-section">
+  <div class="s-label reveal">آراء العملاء</div>
+  <div class="s-title reveal">ماذا يقول عملاؤنا؟</div>
+  <div class="test-grid">
+    <div class="test-card reveal"><div class="test-stars">★★★★★</div><p class="test-text">"منتجات رائعة وجودة عالية جداً. طقم الأواني الفخارية جميل وعملي في نفس الوقت. هشتري تاني من دار!"</p><div class="test-author"><div class="test-av">ن</div><div><div class="test-name">نورا أحمد</div><div class="test-loc">القاهرة</div></div></div></div>
+    <div class="test-card reveal"><div class="test-stars">★★★★★</div><p class="test-text">"التوصيل كان سريع جداً والتغليف أنيق. أحسست إن المنتج وصلني هدية. سعيد جداً بتجربة التسوق من دار."</p><div class="test-author"><div class="test-av">م</div><div><div class="test-name">محمد سمير</div><div class="test-loc">الإسكندرية</div></div></div></div>
+    <div class="test-card reveal"><div class="test-stars">★★★★☆</div><p class="test-text">"اشتريت طقم شموع عطرية وكانت أحلى من توقعاتي. الرائحة جميلة والتصميم أنيق. بنصح بيه لكل الناس."</p><div class="test-author"><div class="test-av">س</div><div><div class="test-name">سارة عمر</div><div class="test-loc">الجيزة</div></div></div></div>
+  </div>
+</section>
+
+<section class="newsletter-section">
+  <div class="nl-box reveal">
+    <div class="s-label">ابقَ على اطلاع</div>
+    <h2>اشترك في نشرتنا البريدية</h2>
+    <p>احصل على أحدث العروض والمنتجات الجديدة مباشرة في بريدك الإلكتروني</p>
+    <div class="nl-form">
+      <input type="email" placeholder="أدخل بريدك الإلكتروني">
+      <button>اشترك الآن</button>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="footer-logo">دار</span>
+      <p>متجرك الأول لكل احتياجات المنزل. نقدم أفضل المنتجات بجودة عالية وأسعار مناسبة لكل بيت مصري.</p>
+      <div class="socials">
+        <a href="#" class="soc">📘</a><a href="#" class="soc">📸</a><a href="#" class="soc">🐦</a><a href="#" class="soc">▶️</a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>روابط سريعة</h4><ul><li><a href="#">الرئيسية</a></li><li><a href="#">المنتجات</a></li><li><a href="#">العروض</a></li><li><a href="#">من نحن</a></li></ul></div>
+    <div class="footer-col"><h4>الأقسام</h4><ul><li><a href="#">أدوات المطبخ</a></li><li><a href="#">الديكور</a></li><li><a href="#">أثاث المنزل</a></li><li><a href="#">العناية بالمنزل</a></li></ul></div>
+    <div class="footer-col"><h4>تواصل معنا</h4><ul><li><a href="#">📍 القاهرة، مصر</a></li><li><a href="#">📞 010 1234 5678</a></li><li><a href="#">✉️ dar.home.store</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Dar Store. جميع الحقوق محفوظة.</p>
+    <p>صُنع بـ ❤️ لكل بيت مصري</p>
+  </div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);obs.unobserve(e.target)}})},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
