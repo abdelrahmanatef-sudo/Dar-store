@@ -26,11 +26,8 @@
             --radius: 16px;
             --radius-sm: 8px;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         html { scroll-behavior: smooth; }
-        
         body {
             font-family: 'Cairo', sans-serif;
             background: var(--bg);
@@ -38,12 +35,10 @@
             overflow-x: hidden;
             line-height: 1.7;
         }
-
         /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
-
         /* Animations */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
@@ -66,13 +61,11 @@
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
-
         .animate { opacity: 0; }
         .animate.visible { animation: fadeInUp 0.8s ease forwards; }
         .animate-delay-1 { animation-delay: 0.1s; }
         .animate-delay-2 { animation-delay: 0.2s; }
         .animate-delay-3 { animation-delay: 0.3s; }
-
         /* Top Bar */
         .top-bar {
             background: var(--primary);
@@ -113,7 +106,6 @@
             transition: all 0.3s;
         }
         .lang-switch:hover { background: var(--accent); color: var(--primary); }
-
         /* Header */
         header {
             background: rgba(255,255,255,0.95);
@@ -125,7 +117,6 @@
             transition: all 0.3s;
         }
         header.scrolled { box-shadow: var(--shadow-md); }
-        
         .header-content {
             max-width: 1400px;
             margin: 0 auto;
@@ -135,7 +126,6 @@
             align-items: center;
             height: 80px;
         }
-
         .logo {
             display: flex;
             align-items: center;
@@ -167,7 +157,6 @@
             letter-spacing: 2px;
             text-transform: uppercase;
         }
-
         nav { display: flex; gap: 2.5rem; }
         nav a {
             text-decoration: none;
@@ -188,7 +177,6 @@
         }
         nav a:hover { color: var(--accent); }
         nav a:hover::after { width: 100%; }
-
         .header-actions {
             display: flex;
             align-items: center;
@@ -257,7 +245,6 @@
             align-items: center;
             justify-content: center;
         }
-
         .mobile-menu-btn {
             display: none;
             background: none;
@@ -266,7 +253,6 @@
             color: var(--primary);
             cursor: pointer;
         }
-
         /* Hero Section */
         .hero {
             position: relative;
@@ -364,7 +350,6 @@
             background: rgba(255,255,255,0.1);
             border-color: var(--white);
         }
-
         .hero-image {
             position: relative;
             animation: fadeIn 1.2s ease 0.3s both;
@@ -418,7 +403,6 @@
             color: var(--text-light);
             font-size: 0.75rem;
         }
-
         .hero-stats {
             position: absolute;
             bottom: 40px;
@@ -445,7 +429,6 @@
             font-size: 0.85rem;
             margin-top: 4px;
         }
-
         /* Features Bar */
         .features-bar {
             background: var(--white);
@@ -482,7 +465,6 @@
         }
         .feature-item h4 { font-size: 0.95rem; color: var(--primary); }
         .feature-item p { font-size: 0.8rem; color: var(--text-light); }
-
         /* Section Styles */
         section { padding: 5rem 0; }
         .container {
@@ -517,7 +499,6 @@
             max-width: 600px;
             margin: 0 auto;
         }
-
         /* Categories */
         .categories-grid {
             display: grid;
@@ -579,7 +560,6 @@
             transform: translateX(0);
             opacity: 1;
         }
-
         /* Products */
         .products-section { background: var(--bg-warm); }
         .products-grid {
@@ -690,7 +670,6 @@
             color: #999;
             text-decoration: line-through;
         }
-
         /* Promo Banner */
         .promo-banner {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -756,7 +735,6 @@
             border-radius: var(--radius);
             box-shadow: var(--shadow-lg);
         }
-
         /* Testimonials */
         .testimonials-section { background: var(--bg); }
         .testimonials-grid {
@@ -810,7 +788,6 @@
         }
         .author-info h4 { font-size: 0.95rem; color: var(--primary); }
         .author-info p { font-size: 0.8rem; color: var(--text-light); }
-
         /* Newsletter */
         .newsletter {
             background: linear-gradient(135deg, var(--bg-warm), var(--bg));
@@ -855,7 +832,6 @@
             border-color: var(--accent);
             box-shadow: 0 0 0 4px rgba(201,169,110,0.1);
         }
-
         /* Footer */
         footer {
             background: var(--primary);
@@ -942,7 +918,6 @@
             font-size: 1.5rem;
             color: rgba(255,255,255,0.5);
         }
-
         /* Cart Sidebar */
         .cart-overlay {
             position: fixed;
@@ -1093,7 +1068,6 @@
             color: #ddd;
             margin-bottom: 1rem;
         }
-
         /* Toast Notification */
         .toast {
             position: fixed;
@@ -1118,7 +1092,6 @@
             opacity: 1;
         }
         .toast i { color: var(--accent); }
-
         /* Quick View Modal */
         .modal-overlay {
             position: fixed;
@@ -1200,7 +1173,6 @@
             font-size: 0.85rem;
         }
         .meta-item strong { color: var(--primary); display: block; margin-bottom: 4px; }
-
         /* Mobile Responsive */
         @media (max-width: 1024px) {
             .hero-content { grid-template-columns: 1fr; text-align: center; }
@@ -1227,7 +1199,6 @@
             .modal-content { grid-template-columns: 1fr; }
             .newsletter-form { flex-direction: column; }
         }
-
         /* Loading Skeleton */
         .skeleton {
             background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
@@ -1235,7 +1206,6 @@
             animation: shimmer 1.5s infinite;
             border-radius: var(--radius-sm);
         }
-
         /* RTL Adjustments for English */
         body[dir="ltr"] {
             direction: ltr;
@@ -1253,7 +1223,6 @@
     </style>
 </head>
 <body>
-
     <!-- Top Bar -->
     <div class="top-bar">
         <div class="top-bar-content">
@@ -1267,7 +1236,6 @@
             </button>
         </div>
     </div>
-
     <!-- Header -->
     <header id="header">
         <div class="header-content">
@@ -1278,7 +1246,6 @@
                     <div class="logo-sub">كل ما يحتاجه بيتك</div>
                 </div>
             </a>
-            
             <nav>
                 <a href="#home" data-ar="الرئيسية" data-en="Home">الرئيسية</a>
                 <a href="#products" data-ar="المنتجات" data-en="Products">المنتجات</a>
@@ -1286,7 +1253,6 @@
                 <a href="#about" data-ar="من نحن" data-en="About">من نحن</a>
                 <a href="#contact" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</a>
             </nav>
-
             <div class="header-actions">
                 <div class="search-box">
                     <input type="text" placeholder="ابحث عن منتج..." id="searchInput">
@@ -1301,7 +1267,6 @@
             </div>
         </div>
     </header>
-
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-bg"></div>
@@ -1356,7 +1321,6 @@
             </div>
         </div>
     </section>
-
     <!-- Features Bar -->
     <div class="features-bar">
         <div class="features-grid">
@@ -1390,7 +1354,6 @@
             </div>
         </div>
     </div>
-
     <!-- Categories -->
     <section id="categories">
         <div class="container">
@@ -1435,7 +1398,6 @@
             </div>
         </div>
     </section>
-
     <!-- Products -->
     <section class="products-section" id="products">
         <div class="container">
@@ -1449,7 +1411,6 @@
             </div>
         </div>
     </section>
-
     <!-- Promo Banner -->
     <section>
         <div class="container">
@@ -1473,7 +1434,6 @@
             </div>
         </div>
     </section>
-
     <!-- Testimonials -->
     <section class="testimonials-section">
         <div class="container">
@@ -1525,7 +1485,6 @@
             </div>
         </div>
     </section>
-
     <!-- About -->
     <section id="about">
         <div class="container">
@@ -1566,7 +1525,6 @@
             </div>
         </div>
     </section>
-
     <!-- Newsletter -->
     <section class="newsletter">
         <div class="container">
@@ -1581,7 +1539,6 @@
             </div>
         </div>
     </section>
-
     <!-- Footer -->
     <footer id="contact">
         <div class="container">
@@ -1635,7 +1592,6 @@
             </div>
         </div>
     </footer>
-
     <!-- Cart Sidebar -->
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
@@ -1660,7 +1616,6 @@
             </button>
         </div>
     </div>
-
     <!-- Quick View Modal -->
     <div class="modal-overlay" id="quickViewModal" onclick="closeQuickView(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -1695,4 +1650,180 @@
                 </button>
             </div>
         </div>
-   
+    </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMsg">تم الإضافة للسلة</span>
+    </div>
+
+    <a href="https://wa.me/201121414149" target="_blank"
+       style="position:fixed;bottom:24px;left:24px;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;box-shadow:0 6px 20px rgba(37,211,102,0.4);z-index:999;text-decoration:none;">
+        <i class="fab fa-whatsapp" style="color:white;"></i>
+    </a>
+
+    <script>
+    const products = [
+        { id:1, name:'طقم مزهريات سيراميك', category:'الديكور', price:120, oldPrice:150, badge:'جديد', badgeClass:'badge-new', rating:4.8, reviews:124, img:'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=400&h=300&fit=crop', desc:'طقم 3 مزهريات سيراميك بتصميم أنيق' },
+        { id:2, name:'طقم سكاكين مطبخ', category:'أدوات المطبخ', price:350, oldPrice:430, badge:'خصم 20%', badgeClass:'badge-sale', rating:4.9, reviews:89, img:'https://images.unsplash.com/photo-1593618998160-e34014e67546?w=400&h=300&fit=crop', desc:'5 سكاكين ستانلس ستيل مع حامل خشبي' },
+        { id:3, name:'طقم شموع عطرية', category:'الديكور', price:85, oldPrice:null, badge:'', badgeClass:'', rating:4.7, reviews:210, img:'https://images.unsplash.com/photo-1603905460832-dcd1a619bd6f?w=400&h=300&fit=crop', desc:'شموع طبيعية بروائح منعشة' },
+        { id:4, name:'أصص نباتات فخارية', category:'الديكور', price:65, oldPrice:null, badge:'', badgeClass:'', rating:4.6, reviews:56, img:'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400&h=300&fit=crop', desc:'أصص بأحجام مختلفة لجميع النباتات' },
+        { id:5, name:'طقم أكواب قهوة', category:'أدوات المطبخ', price:195, oldPrice:null, badge:'الأكثر مبيعاً', badgeClass:'badge-bestseller', rating:5.0, reviews:302, img:'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=400&h=300&fit=crop', desc:'6 أكواب سيراميك مزخرف' },
+        { id:6, name:'مرايا ديكور خشبية', category:'الديكور', price:420, oldPrice:null, badge:'', badgeClass:'', rating:4.8, reviews:45, img:'https://images.unsplash.com/photo-1618220179428-22790b461013?w=400&h=300&fit=crop', desc:'مرايا بإطارات خشبية طبيعية' },
+        { id:7, name:'طقم مناشف فاخرة', category:'الحمام', price:160, oldPrice:200, badge:'جديد', badgeClass:'badge-new', rating:4.9, reviews:178, img:'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=400&h=300&fit=crop', desc:'مناشف قطن 100% ناعمة ومتينة' },
+        { id:8, name:'لوح تقطيع خشب زيتون', category:'أدوات المطبخ', price:230, oldPrice:null, badge:'', badgeClass:'', rating:4.7, reviews:93, img:'https://images.unsplash.com/photo-1588165171080-c89acfa5ee83?w=400&h=300&fit=crop', desc:'لوح طبيعي من خشب الزيتون' }
+    ];
+    let cart = [];
+
+    function renderProducts() {
+        const grid = document.getElementById('productsGrid');
+        grid.innerHTML = products.map(p => `
+            <div class="product-card animate">
+                ${p.badge ? `<span class="product-badge ${p.badgeClass}">${p.badge}</span>` : ''}
+                <div class="product-img-wrap">
+                    <img src="${p.img}" alt="${p.name}" loading="lazy">
+                    <div class="product-actions">
+                        <button onclick="addToCart(${p.id})" title="أضف للسلة"><i class="fas fa-shopping-bag"></i></button>
+                        <button onclick="openQuickView(${p.id})" title="عرض سريع"><i class="fas fa-eye"></i></button>
+                        <button onclick="toggleWish(this)" title="المفضلة"><i class="far fa-heart"></i></button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">${p.category}</div>
+                    <div class="product-name">${p.name}</div>
+                    <div class="product-rating">
+                        <div class="stars">${"★".repeat(Math.floor(p.rating))}${"☆".repeat(5-Math.floor(p.rating))}</div>
+                        <span class="rating-count">(${p.reviews})</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-current">${p.price} ج.م</span>
+                        ${p.oldPrice ? `<span class="price-old">${p.oldPrice} ج.م</span>` : ""}
+                    </div>
+                </div>
+            </div>
+        `).join("");
+        observeAnimations();
+    }
+
+    function addToCart(id) {
+        const p = products.find(x => x.id === id);
+        const ex = cart.find(x => x.id === id);
+        if (ex) ex.qty++; else cart.push({...p, qty:1});
+        updateCartUI();
+        showToast("تم إضافة " + p.name + " للسلة");
+    }
+
+    function updateCartUI() {
+        const count = cart.reduce((s,i) => s+i.qty, 0);
+        document.getElementById("cartCount").textContent = count;
+        const items = document.getElementById("cartItems");
+        const footer = document.getElementById("cartFooter");
+        if (!cart.length) {
+            items.innerHTML = `<div class="empty-cart"><i class="fas fa-shopping-basket"></i><p>سلة المشتريات فارغة</p></div>`;
+            footer.style.display = "none";
+        } else {
+            items.innerHTML = cart.map(i => `
+                <div class="cart-item">
+                    <img src="${i.img}" class="cart-item-img">
+                    <div class="cart-item-details">
+                        <div class="cart-item-name">${i.name}</div>
+                        <div class="cart-item-price">${i.price} ج.م</div>
+                        <div class="cart-item-qty">
+                            <button class="qty-btn" onclick="changeQty(${i.id},-1)">-</button>
+                            <span>${i.qty}</span>
+                            <button class="qty-btn" onclick="changeQty(${i.id},1)">+</button>
+                        </div>
+                    </div>
+                    <button class="cart-item-remove" onclick="removeItem(${i.id})"><i class="fas fa-trash"></i></button>
+                </div>`).join("");
+            document.getElementById("cartTotal").textContent = cart.reduce((s,i)=>s+i.price*i.qty,0) + " ج.م";
+            footer.style.display = "block";
+        }
+    }
+
+    function changeQty(id, d) {
+        const i = cart.find(x=>x.id===id);
+        if(!i) return;
+        i.qty+=d;
+        if(i.qty<=0) cart=cart.filter(x=>x.id!==id);
+        updateCartUI();
+    }
+
+    function removeItem(id) { cart=cart.filter(x=>x.id!==id); updateCartUI(); showToast("تم حذف المنتج"); }
+    function openCart() { document.getElementById("cartSidebar").classList.add("active"); document.getElementById("cartOverlay").classList.add("active"); document.body.style.overflow="hidden"; }
+    function closeCart() { document.getElementById("cartSidebar").classList.remove("active"); document.getElementById("cartOverlay").classList.remove("active"); document.body.style.overflow=""; }
+    function checkout() { showToast("جاري تحويلك لصفحة الدفع..."); setTimeout(closeCart,1500); }
+
+    function openQuickView(id) {
+        const p = products.find(x=>x.id===id);
+        document.getElementById("modalImg").src = p.img;
+        document.getElementById("modalTitle").textContent = p.name;
+        document.getElementById("modalPrice").textContent = p.price + " ج.م";
+        document.getElementById("modalDesc").textContent = p.desc;
+        document.getElementById("modalAddBtn").onclick = () => { addToCart(id); closeQuickView(); };
+        document.getElementById("quickViewModal").classList.add("active");
+        document.body.style.overflow="hidden";
+    }
+
+    function closeQuickView(e) {
+        if (!e || e.target===document.getElementById("quickViewModal")) {
+            document.getElementById("quickViewModal").classList.remove("active");
+            document.body.style.overflow="";
+        }
+    }
+
+    function toggleWish(btn) {
+        const icon = btn.querySelector("i");
+        if(icon.classList.contains("far")) { icon.classList.replace("far","fas"); icon.style.color="#e74c3c"; showToast("تم الإضافة للمفضلة"); }
+        else { icon.classList.replace("fas","far"); icon.style.color=""; }
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById("toast");
+        document.getElementById("toastMsg").textContent = msg;
+        t.classList.add("show");
+        setTimeout(()=>t.classList.remove("show"),3000);
+    }
+
+    function startCountdown() {
+        const end = new Date(Date.now()+2*86400000+14*3600000+35*60000+48000);
+        setInterval(()=>{
+            const diff=end-Date.now(); if(diff<=0) return;
+            document.getElementById("days").textContent=String(Math.floor(diff/86400000)).padStart(2,"0");
+            document.getElementById("hours").textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,"0");
+            document.getElementById("minutes").textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
+            document.getElementById("seconds").textContent=String(Math.floor((diff%60000)/1000)).padStart(2,"0");
+        },1000);
+    }
+
+    function observeAnimations() {
+        const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add("visible"),i*80);obs.unobserve(e.target);}});},{threshold:0.1});
+        document.querySelectorAll(".animate").forEach(el=>obs.observe(el));
+    }
+
+    window.addEventListener("scroll",()=>document.getElementById("header").classList.toggle("scrolled",window.scrollY>50));
+
+    let isAr=true;
+    function toggleLang() {
+        isAr=!isAr;
+        document.body.dir=isAr?"rtl":"ltr";
+        document.getElementById("langText").textContent=isAr?"English":"عربي";
+        document.querySelectorAll("[data-ar]").forEach(el=>el.textContent=isAr?el.dataset.ar:el.dataset.en);
+        document.getElementById("searchInput").placeholder=isAr?"ابحث عن منتج...":"Search products...";
+    }
+
+    document.getElementById("searchInput").addEventListener("input",function(){
+        const q=this.value.toLowerCase();
+        document.querySelectorAll(".product-card").forEach((card,i)=>{
+            const name=products[i]?.name?.toLowerCase()||"";
+            card.style.display=(!q||name.includes(q))?"":"none";
+        });
+    });
+
+    renderProducts();
+    startCountdown();
+    observeAnimations();
+    </script>
+</body>
+</html>
