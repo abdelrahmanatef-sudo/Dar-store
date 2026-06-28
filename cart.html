@@ -1,0 +1,545 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سلة التسوق | دار ستور</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #c9a96e;
+            --accent-light: #e8d5b5;
+            --text: #2d2d2d;
+            --text-light: #666;
+            --bg: #faf8f5;
+            --white: #ffffff;
+            --success: #2d6a4f;
+            --danger: #c0392b;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+            --radius-sm: 8px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        .main-header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-icon {
+            width: 45px; height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 1.3rem;
+        }
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .logo-text span { color: var(--accent); }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .header-actions a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.2rem;
+            position: relative;
+        }
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.7rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .cart-page {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1.5fr 0.5fr;
+            gap: 3rem;
+        }
+        .cart-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .cart-title i { color: var(--accent); }
+
+        .cart-items { display: flex; flex-direction: column; gap: 1rem; }
+        .cart-item {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .cart-item-img {
+            width: 100px;
+            height: 100px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+        }
+        .cart-item-info { flex: 1; }
+        .cart-item-name {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+            font-size: 1.1rem;
+        }
+        .cart-item-price {
+            color: var(--accent);
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .qty-btn {
+            width: 35px;
+            height: 35px;
+            border: 2px solid #e8e8e8;
+            background: var(--bg);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qty-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        .qty-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+            min-width: 30px;
+            text-align: center;
+        }
+        .cart-item-total {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+            min-width: 100px;
+            text-align: left;
+        }
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+        }
+
+        .cart-summary {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+        .cart-summary h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95rem;
+        }
+        .summary-row.total {
+            border-top: 2px solid var(--primary);
+            border-bottom: none;
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .summary-row.total .price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--accent);
+        }
+        .checkout-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--accent), #b8945f);
+            border: none;
+            border-radius: 50px;
+            color: var(--primary);
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(201,169,110,0.3);
+        }
+        .continue-shopping {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .continue-shopping:hover { color: var(--accent); }
+
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+        }
+        .empty-cart i {
+            font-size: 4rem;
+            color: var(--accent-light);
+            margin-bottom: 1.5rem;
+        }
+        .empty-cart h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .empty-cart p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+        .shop-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 30px;
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        .shop-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(201,169,110,0.3);
+        }
+
+        .promo-code {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f0f0f0;
+        }
+        .promo-code label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .promo-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .promo-input input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid #e8e8e8;
+            border-radius: var(--radius-sm);
+            font-family: 'Cairo', sans-serif;
+            outline: none;
+        }
+        .promo-input input:focus { border-color: var(--accent); }
+        .promo-input button {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .promo-input button:hover { background: var(--accent); color: var(--primary); }
+
+        .footer {
+            background: var(--primary);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+            text-align: center;
+        }
+        .footer p {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .cart-page { grid-template-columns: 1fr; }
+            .cart-item { flex-wrap: wrap; }
+            .cart-item-total { text-align: right; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i class="fas fa-home"></i></div>
+                <div class="logo-text">دار <span>ستور</span></div>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="product.html">المنتجات</a></li>
+                    <li><a href="index.html#categories">الفئات</a></li>
+                    <li><a href="index.html#featured">عروض</a></li>
+                    <li><a href="login.html">حسابي</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="login.html"><i class="far fa-user"></i></a>
+                <a href="cart.html">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="cart-page">
+        <div class="cart-main">
+            <h1 class="cart-title">
+                <i class="fas fa-shopping-bag"></i>
+                سلة التسوق
+                <span style="font-size: 1rem; color: var(--text-light); font-weight: 400;" id="itemsCount">(0 منتج)</span>
+            </h1>
+            <div id="cartContainer"></div>
+        </div>
+        <div class="cart-summary" id="cartSummary" style="display: none;">
+            <h3>ملخص الطلب</h3>
+            <div class="summary-row">
+                <span>المجموع الجزئي</span>
+                <span id="subtotal">0 ج.م</span>
+            </div>
+            <div class="summary-row">
+                <span>رسوم التوصيل</span>
+                <span id="shipping">50 ج.م</span>
+            </div>
+            <div class="summary-row">
+                <span>الخصم</span>
+                <span style="color: var(--success);" id="discount">0 ج.م</span>
+            </div>
+            <div class="summary-row total">
+                <span>الإجمالي</span>
+                <span class="price" id="total">0 ج.م</span>
+            </div>
+            <div class="promo-code">
+                <label>كود الخصم</label>
+                <div class="promo-input">
+                    <input type="text" placeholder="أدخل كود الخصم..." id="promoInput">
+                    <button onclick="applyPromo()">تطبيق</button>
+                </div>
+            </div>
+            <a href="checkout.html" class="checkout-btn">
+                <i class="fas fa-lock"></i>
+                إتمام الطلب
+            </a>
+            <a href="index.html" class="continue-shopping">
+                <i class="fas fa-arrow-right"></i>
+                مواصلة التسوق
+            </a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2024 دار ستور. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('darCart')) || [];
+
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cartCount').textContent = count;
+            document.getElementById('itemsCount').textContent = `(${count} منتج)`;
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cartContainer');
+            const summary = document.getElementById('cartSummary');
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-bag"></i>
+                        <h2>سلة التسوق فارغة</h2>
+                        <p>لم تضف أي منتجات إلى سلتك بعد. استكشف منتجاتنا وابدأ التسوق!</p>
+                        <a href="index.html" class="shop-btn">
+                            <i class="fas fa-shopping-bag"></i>
+                            ابدأ التسوق
+                        </a>
+                    </div>
+                `;
+                summary.style.display = 'none';
+                return;
+            }
+
+            summary.style.display = 'block';
+            container.innerHTML = cart.map((item, index) => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">${item.price} ج.م / قطعة</div>
+                    </div>
+                    <div class="cart-item-qty">
+                        <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
+                        <span class="qty-value">${item.qty}</span>
+                        <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+                    </div>
+                    <div class="cart-item-total">${item.price * item.qty} ج.م</div>
+                    <button class="remove-btn" onclick="removeItem(${index})">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            updateTotals();
+        }
+
+        function updateQty(index, change) {
+            cart[index].qty += change;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            localStorage.setItem('darCart', JSON.stringify(cart));
+            renderCart();
+            updateCartCount();
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('darCart', JSON.stringify(cart));
+            renderCart();
+            updateCartCount();
+        }
+
+        function updateTotals() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const shipping = subtotal > 500 ? 0 : 50;
+            const discount = 0;
+            const total = subtotal + shipping - discount;
+
+            document.getElementById('subtotal').textContent = subtotal.toLocaleString() + ' ج.م';
+            document.getElementById('shipping').textContent = shipping === 0 ? 'مجاني' : shipping + ' ج.م';
+            document.getElementById('discount').textContent = discount > 0 ? '-' + discount.toLocaleString() + ' ج.م' : '0 ج.م';
+            document.getElementById('total').textContent = total.toLocaleString() + ' ج.م';
+        }
+
+        function applyPromo() {
+            const code = document.getElementById('promoInput').value.trim();
+            if (code === 'DAR10') {
+                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+                const discount = Math.round(subtotal * 0.1);
+                document.getElementById('discount').textContent = '-' + discount.toLocaleString() + ' ج.م';
+                const shipping = subtotal > 500 ? 0 : 50;
+                const total = subtotal + shipping - discount;
+                document.getElementById('total').textContent = total.toLocaleString() + ' ج.م';
+                alert('تم تطبيق خصم 10%!');
+            } else {
+                alert('كود الخصم غير صالح');
+            }
+        }
+
+        renderCart();
+        updateCartCount();
+    </script>
+</body>
+</html>

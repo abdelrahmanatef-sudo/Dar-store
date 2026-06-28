@@ -1,0 +1,946 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دار ستور | متجرك للأثاث والديكور الفاخر</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #c9a96e;
+            --accent-light: #e8d5b5;
+            --text: #2d2d2d;
+            --text-light: #666;
+            --bg: #faf8f5;
+            --bg-warm: #f5f0e8;
+            --white: #ffffff;
+            --success: #2d6a4f;
+            --danger: #c0392b;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.08);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.12);
+            --radius: 16px;
+            --radius-sm: 8px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Header */
+        .main-header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-icon {
+            width: 45px; height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 1.3rem;
+        }
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .logo-text span { color: var(--accent); }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0; right: 0;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .header-actions a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.2rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+        .header-actions a:hover { color: var(--accent); }
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.7rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1400&h=600&fit=crop') center/cover;
+            opacity: 0.3;
+        }
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .hero-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        .hero-text h1 span { color: var(--accent); }
+        .hero-text p {
+            color: rgba(255,255,255,0.8);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 40px;
+            background: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(201,169,110,0.4);
+        }
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        .stat-item h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+        .stat-item p { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+
+        /* Categories */
+        .categories {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .section-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+        .category-card {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            height: 280px;
+            cursor: pointer;
+            transition: transform 0.4s;
+        }
+        .category-card:hover { transform: translateY(-8px); }
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s;
+        }
+        .category-card:hover img { transform: scale(1.1); }
+        .category-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(26,26,46,0.9), transparent);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+        }
+        .category-overlay h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        .category-overlay p {
+            color: var(--accent-light);
+            font-size: 0.9rem;
+        }
+        .category-overlay span {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* Featured Products */
+        .featured {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+        .product-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s;
+            position: relative;
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            z-index: 2;
+        }
+        .badge-sale { background: var(--danger); color: white; }
+        .badge-new { background: var(--success); color: white; }
+        .badge-bestseller { background: var(--accent); color: var(--primary); }
+        .product-card .wishlist-icon {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 2;
+            border: none;
+            color: var(--text-light);
+        }
+        .product-card .wishlist-icon:hover { color: var(--danger); }
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.4s;
+        }
+        .product-card:hover img { transform: scale(1.05); }
+        .product-card-info { padding: 1.5rem; }
+        .product-card-category {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .product-card-name {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            text-decoration: none;
+            display: block;
+        }
+        .product-card-name:hover { color: var(--accent); }
+        .product-card-rating {
+            color: #f1c40f;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        .product-card-price {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .price-current {
+            color: var(--accent);
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+        .price-old {
+            color: #999;
+            text-decoration: line-through;
+            font-size: 0.9rem;
+        }
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .add-to-cart-btn:hover {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* Features Banner */
+        .features-banner {
+            background: var(--primary);
+            padding: 4rem 0;
+            margin: 4rem 0;
+        }
+        .features-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        .feature-item {
+            text-align: center;
+            color: white;
+        }
+        .feature-item i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        .feature-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .feature-item p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Newsletter */
+        .newsletter {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+        .newsletter h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .newsletter p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .newsletter-form input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 2px solid #e8e8e8;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .newsletter-form input:focus { border-color: var(--accent); }
+        .newsletter-form button {
+            padding: 14px 30px;
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .newsletter-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(201,169,110,0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+        .footer-brand .logo-text {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .footer-brand p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .footer-social a:hover {
+            background: var(--accent);
+            color: var(--primary);
+        }
+        .footer-links h4 {
+            color: var(--accent);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        .footer-links ul {
+            list-style: none;
+        }
+        .footer-links li { margin-bottom: 0.8rem; }
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover { color: var(--accent); }
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 2rem auto 0;
+            padding: 2rem 2rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        @media (max-width: 1024px) {
+            .categories-grid, .products-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-content { grid-template-columns: 1fr; text-align: center; }
+            .hero-text h1 { font-size: 2.5rem; }
+            .hero-stats { justify-content: center; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .categories-grid, .products-grid { grid-template-columns: 1fr; }
+            .hero { min-height: 500px; }
+            .hero-text h1 { font-size: 2rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; }
+            .newsletter-form { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i class="fas fa-home"></i></div>
+                <div class="logo-text">دار <span>ستور</span></div>
+            </a>
+
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">الرئيسية</a></li>
+                    <li><a href="product.html">المنتجات</a></li>
+                    <li><a href="#categories">الفئات</a></li>
+                    <li><a href="#featured">عروض</a></li>
+                    <li><a href="login.html">حسابي</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <a href="login.html"><i class="far fa-user"></i></a>
+                <a href="cart.html">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>أثاث فاخر <span>لمنزل</span><br>أنيق ومميز</h1>
+                <p>اكتشف تشكيلتنا الفريدة من الأثاث والديكور اليدوي المصري. كل قطعة تحكي قصة تراث وأصالة.</p>
+                <a href="#featured" class="hero-btn">
+                    <i class="fas fa-shopping-bag"></i>
+                    تسوق الآن
+                </a>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <h3>+5000</h3>
+                        <p>عميل سعيد</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>+200</h3>
+                        <p>منتج فريد</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>100%</h3>
+                        <p>صناعة مصرية</p>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories" id="categories">
+        <div class="section-header">
+            <h2>تسوق حسب الفئة</h2>
+            <p>اختر من بين مجموعاتنا المتنوعة</p>
+        </div>
+        <div class="categories-grid">
+            <div class="category-card" onclick="window.location.href='product.html'">
+                <img src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&h=280&fit=crop" alt="أواني فخارية">
+                <div class="category-overlay">
+                    <h3>أواني فخارية</h3>
+                    <p>25 منتج</p>
+                    <span>تسوق الآن <i class="fas fa-arrow-left"></i></span>
+                </div>
+            </div>
+            <div class="category-card" onclick="window.location.href='product.html'">
+                <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=400&h=280&fit=crop" alt="أدوات تقديم">
+                <div class="category-overlay">
+                    <h3>أدوات تقديم</h3>
+                    <p>18 منتج</p>
+                    <span>تسوق الآن <i class="fas fa-arrow-left"></i></span>
+                </div>
+            </div>
+            <div class="category-card" onclick="window.location.href='product.html'">
+                <img src="https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?w=400&h=280&fit=crop" alt="شموع عطرية">
+                <div class="category-overlay">
+                    <h3>شموع عطرية</h3>
+                    <p>32 منتج</p>
+                    <span>تسوق الآن <i class="fas fa-arrow-left"></i></span>
+                </div>
+            </div>
+            <div class="category-card" onclick="window.location.href='product.html'">
+                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=400&h=280&fit=crop" alt="ديكور منزلي">
+                <div class="category-overlay">
+                    <h3>ديكور منزلي</h3>
+                    <p>45 منتج</p>
+                    <span>تسوق الآن <i class="fas fa-arrow-left"></i></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured" id="featured">
+        <div class="section-header">
+            <h2>منتجات مميزة</h2>
+            <p>اخترنا لك أفضل القطع بعناية</p>
+        </div>
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be loaded via JS -->
+        </div>
+    </section>
+
+    <!-- Features Banner -->
+    <section class="features-banner">
+        <div class="features-grid">
+            <div class="feature-item">
+                <i class="fas fa-truck"></i>
+                <h3>توصيل سريع</h3>
+                <p>توصيل خلال 2-5 أيام لجميع المحافظات</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-shield-alt"></i>
+                <h3>جودة مضمونة</h3>
+                <p>ضمان استرجاع 14 يوم على كل المنتجات</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-hand-holding-heart"></i>
+                <h3>صناعة يدوية</h3>
+                <p>كل قطعة مصنوعة بأيدي حرفيين مصريين</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-headset"></i>
+                <h3>دعم 24/7</h3>
+                <p>فريق خدمة العملاء جاهز لمساعدتك</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <h2>اشترك في نشرتنا الإخبارية</h2>
+        <p>احصل على أحدث العروض والتشكيلات الجديدة مباشرة على بريدك</p>
+        <div class="newsletter-form">
+            <input type="email" placeholder="بريدك الإلكتروني...">
+            <button>اشترك الآن</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-text">دار <span style="color: var(--accent);">ستور</span></span>
+                <p>متجرك المفضل للأثاث والديكور الفاخر. نجمع بين التراث المصري الأصيل والتصميم العصري لنقدم لك قطع فريدة تضيف لمسة سحرية لمنزلك.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="product.html">المنتجات</a></li>
+                    <li><a href="#categories">الفئات</a></li>
+                    <li><a href="#featured">العروض</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>خدمة العملاء</h4>
+                <ul>
+                    <li><a href="#">تواصل معنا</a></li>
+                    <li><a href="#">سياسة الإرجاع</a></li>
+                    <li><a href="#">الأسئلة الشائعة</a></li>
+                    <li><a href="#">شروط الاستخدام</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>تواصل معنا</h4>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt" style="color: var(--accent); margin-left: 8px;"></i> القاهرة، مصر</li>
+                    <li><i class="fas fa-phone" style="color: var(--accent); margin-left: 8px;"></i> 01234567890</li>
+                    <li><i class="fas fa-envelope" style="color: var(--accent); margin-left: 8px;"></i> info@darstore.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 دار ستور. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample Products Data
+        const products = [
+            {
+                id: 1,
+                name: "طقم أواني فخارية فاخر",
+                category: "أواني فخارية",
+                price: 450,
+                oldPrice: 650,
+                image: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=300&h=250&fit=crop",
+                rating: 4.9,
+                reviews: 128,
+                badge: "bestseller"
+            },
+            {
+                id: 2,
+                name: "طقم أدوات تقديم خشبي",
+                category: "أدوات تقديم",
+                price: 190,
+                oldPrice: null,
+                image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=300&h=250&fit=crop",
+                rating: 4.7,
+                reviews: 85,
+                badge: "new"
+            },
+            {
+                id: 3,
+                name: "طقم شموع عطرية فاخر",
+                category: "شموع عطرية",
+                price: 280,
+                oldPrice: 350,
+                image: "https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?w=300&h=250&fit=crop",
+                rating: 4.8,
+                reviews: 96,
+                badge: "sale"
+            },
+            {
+                id: 4,
+                name: "مزهرية ديكور يدوية",
+                category: "ديكور منزلي",
+                price: 320,
+                oldPrice: null,
+                image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=300&h=250&fit=crop",
+                rating: 4.6,
+                reviews: 64,
+                badge: null
+            },
+            {
+                id: 5,
+                name: "صحن تقديم فخاري كبير",
+                category: "أواني فخارية",
+                price: 150,
+                oldPrice: 200,
+                image: "https://images.unsplash.com/photo-1584269600519-112d071b35e6?w=300&h=250&fit=crop",
+                rating: 4.5,
+                reviews: 42,
+                badge: "sale"
+            },
+            {
+                id: 6,
+                name: "طقم فناجين قهوة تراثي",
+                category: "أواني فخارية",
+                price: 380,
+                oldPrice: null,
+                image: "https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=300&h=250&fit=crop",
+                rating: 4.9,
+                reviews: 156,
+                badge: "bestseller"
+            },
+            {
+                id: 7,
+                name: "سجادة يدوية صغيرة",
+                category: "ديكور منزلي",
+                price: 550,
+                oldPrice: 700,
+                image: "https://images.unsplash.com/photo-1575414003591-ece8d0416c7a?w=300&h=250&fit=crop",
+                rating: 4.7,
+                reviews: 73,
+                badge: "sale"
+            },
+            {
+                id: 8,
+                name: "إطار صور خشبي نحتي",
+                category: "ديكور منزلي",
+                price: 120,
+                oldPrice: null,
+                image: "https://images.unsplash.com/photo-1513519245088-0e12902e35a6?w=300&h=250&fit=crop",
+                rating: 4.4,
+                reviews: 38,
+                badge: "new"
+            }
+        ];
+
+        // Cart functionality
+        let cart = JSON.parse(localStorage.getItem('darCart')) || [];
+
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.qty += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    qty: 1,
+                    image: product.image
+                });
+            }
+
+            localStorage.setItem('darCart', JSON.stringify(cart));
+            updateCartCount();
+
+            // Show notification
+            const btn = event.target.closest('.add-to-cart-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> تمت الإضافة!';
+            btn.style.background = 'var(--success)';
+            btn.style.color = 'white';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '';
+                btn.style.color = '';
+            }, 1500);
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(product => `
+                <div class="product-card">
+                    ${product.badge ? `<span class="product-badge badge-${product.badge}">${
+                        product.badge === 'sale' ? 'خصم' :
+                        product.badge === 'new' ? 'جديد' :
+                        product.badge === 'bestseller' ? 'الأكثر مبيعاً' : ''
+                    }</span>` : ''}
+                    <button class="wishlist-icon" onclick="toggleWishlist(${product.id})">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <a href="product.html">
+                        <img src="${product.image}" alt="${product.name}">
+                    </a>
+                    <div class="product-card-info">
+                        <div class="product-card-category">${product.category}</div>
+                        <a href="product.html" class="product-card-name">${product.name}</a>
+                        <div class="product-card-rating">
+                            ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}
+                            <span style="color: var(--text-light); font-size: 0.8rem;">(${product.reviews})</span>
+                        </div>
+                        <div class="product-card-price">
+                            <span class="price-current">${product.price} ج.م</span>
+                            ${product.oldPrice ? `<span class="price-old">${product.oldPrice} ج.م</span>` : ''}
+                        </div>
+                        <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+                            <i class="fas fa-shopping-bag"></i>
+                            أضف للسلة
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleWishlist(productId) {
+            event.stopPropagation();
+            const icon = event.target.closest('.wishlist-icon').querySelector('i');
+            icon.classList.toggle('far');
+            icon.classList.toggle('fas');
+            icon.style.color = icon.classList.contains('fas') ? 'var(--danger)' : '';
+        }
+
+        // Initialize
+        renderProducts();
+        updateCartCount();
+    </script>
+</body>
+</html>

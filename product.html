@@ -1,0 +1,369 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المنتج | دار ستور</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #c9a96e;
+            --accent-light: #e8d5b5;
+            --text: #2d2d2d;
+            --text-light: #666;
+            --bg: #faf8f5;
+            --white: #ffffff;
+            --success: #2d6a4f;
+            --danger: #c0392b;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+            --radius-sm: 8px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+        .header { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow-sm); }
+        .header-content { max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; height: 80px; }
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { width: 45px; height: 45px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 1.3rem; }
+        .logo-text { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--primary); }
+        .logo-text span { color: var(--accent); }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; transition: color 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+        .header-actions { display: flex; align-items: center; gap: 1.5rem; }
+        .header-actions a { color: var(--text); text-decoration: none; font-size: 1.2rem; position: relative; transition: color 0.3s; }
+        .header-actions a:hover { color: var(--accent); }
+        .cart-count { position: absolute; top: -8px; right: -8px; background: #c0392b; color: white; font-size: 0.7rem; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+
+        .product-detail { max-width: 1400px; margin: 3rem auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        .gallery { position: sticky; top: 100px; }
+        .main-image { width: 100%; height: 500px; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow-md); cursor: zoom-in; }
+        .thumbnail-list { display: flex; gap: 1rem; margin-top: 1rem; overflow-x: auto; }
+        .thumbnail { width: 80px; height: 80px; border-radius: var(--radius-sm); object-fit: cover; cursor: pointer; border: 3px solid transparent; transition: all 0.3s; opacity: 0.7; }
+        .thumbnail:hover, .thumbnail.active { border-color: var(--accent); opacity: 1; }
+
+        .product-info-detail h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--primary); margin-bottom: 1rem; }
+        .product-meta { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .product-rating-large { display: flex; align-items: center; gap: 8px; }
+        .stars-large { color: #f1c40f; font-size: 1.1rem; }
+        .rating-text { color: var(--text-light); font-size: 0.9rem; }
+        .product-badge-detail { padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
+        .badge-bestseller { background: var(--accent); color: var(--primary); }
+
+        .product-price-detail { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 2rem; padding: 1.5rem; background: var(--white); border-radius: var(--radius); }
+        .price-main { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: var(--accent); }
+        .price-old-detail { font-size: 1.3rem; color: #999; text-decoration: line-through; }
+        .price-save { background: rgba(192,57,43,0.1); color: var(--danger); padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
+
+        .product-desc { color: var(--text-light); margin-bottom: 2rem; line-height: 1.9; font-size: 1.05rem; }
+        .product-features { margin-bottom: 2rem; }
+        .product-features h3 { font-size: 1.1rem; color: var(--primary); margin-bottom: 1rem; }
+        .feature-list { list-style: none; }
+        .feature-list li { padding: 8px 0; display: flex; align-items: center; gap: 10px; color: var(--text-light); }
+        .feature-list li i { color: var(--success); font-size: 0.9rem; }
+
+        .purchase-box { background: var(--white); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow-sm); }
+        .qty-selector { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .qty-selector label { font-weight: 600; color: var(--primary); }
+        .qty-controls { display: flex; align-items: center; border: 2px solid #e8e8e8; border-radius: var(--radius-sm); overflow: hidden; }
+        .qty-controls button { width: 40px; height: 40px; background: var(--bg); border: none; cursor: pointer; font-size: 1.2rem; color: var(--text); transition: all 0.2s; }
+        .qty-controls button:hover { background: var(--accent-light); }
+        .qty-controls input { width: 60px; height: 40px; border: none; text-align: center; font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 1.1rem; }
+
+        .add-cart-large { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--accent), #b8945f); border: none; border-radius: 50px; color: var(--primary); font-family: 'Cairo', sans-serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 1rem; }
+        .add-cart-large:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,169,110,0.3); }
+        .wishlist-btn { width: 100%; padding: 14px; background: transparent; border: 2px solid #e8e8e8; border-radius: 50px; color: var(--text); font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .wishlist-btn:hover { border-color: var(--danger); color: var(--danger); }
+        .delivery-info { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #f0f0f0; }
+        .delivery-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.9rem; color: var(--text-light); }
+        .delivery-row i { color: var(--accent); width: 20px; }
+
+        .product-tabs { max-width: 1400px; margin: 4rem auto; padding: 0 2rem; }
+        .tabs-nav { display: flex; gap: 2rem; border-bottom: 2px solid #e8e8e8; margin-bottom: 2rem; }
+        .tab-btn { background: none; border: none; padding: 1rem 0; font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text-light); cursor: pointer; position: relative; transition: color 0.3s; }
+        .tab-btn.active { color: var(--primary); }
+        .tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 3px; background: var(--accent); border-radius: 3px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .reviews-list { display: grid; gap: 1.5rem; }
+        .review-item { background: var(--white); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .reviewer { display: flex; align-items: center; gap: 1rem; }
+        .reviewer-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+        .reviewer-name { font-weight: 700; color: var(--primary); }
+        .review-date { font-size: 0.8rem; color: var(--text-light); }
+        .review-stars { color: #f1c40f; margin-bottom: 0.5rem; }
+        .review-text { color: var(--text-light); line-height: 1.8; }
+
+        .related-products { max-width: 1400px; margin: 4rem auto; padding: 0 2rem; }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary); margin-bottom: 2rem; text-align: center; }
+        .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+        .product-card { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); transition: all 0.4s; }
+        .product-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-md); }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; }
+        .product-card-info { padding: 1rem; }
+        .product-card-name { font-weight: 700; color: var(--primary); margin-bottom: 8px; font-size: 0.95rem; }
+        .product-card-price { color: var(--accent); font-weight: 800; font-size: 1.1rem; }
+
+        .footer { background: var(--primary); color: white; padding: 3rem 0 1.5rem; margin-top: 4rem; }
+        .footer-content { max-width: 1400px; margin: 0 auto; padding: 0 2rem; text-align: center; }
+        .footer-content p { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .product-detail { grid-template-columns: 1fr; }
+            .main-image { height: 300px; }
+            .products-grid { grid-template-columns: repeat(2, 1fr); }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i class="fas fa-home"></i></div>
+                <div class="logo-text">دار <span>ستور</span></div>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="product.html" class="active">المنتجات</a></li>
+                    <li><a href="index.html#categories">الفئات</a></li>
+                    <li><a href="index.html#featured">عروض</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="login.html"><i class="far fa-user"></i></a>
+                <a href="cart.html">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="product-detail">
+        <div class="gallery">
+            <img src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&h=500&fit=crop" alt="طقم أواني فخارية" class="main-image" id="mainImage">
+            <div class="thumbnail-list">
+                <img src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=100&h=100&fit=crop" class="thumbnail active" onclick="changeImage(this)">
+                <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=100&h=100&fit=crop" class="thumbnail" onclick="changeImage(this)">
+                <img src="https://images.unsplash.com/photo-1584269600519-112d071b35e6?w=100&h=100&fit=crop" class="thumbnail" onclick="changeImage(this)">
+                <img src="https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=100&h=100&fit=crop" class="thumbnail" onclick="changeImage(this)">
+            </div>
+        </div>
+
+        <div class="product-info-detail">
+            <div class="product-meta">
+                <span class="product-badge-detail badge-bestseller">الأكثر مبيعاً</span>
+                <div class="product-rating-large">
+                    <span class="stars-large">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </span>
+                    <span class="rating-text">4.9 (128 تقييم)</span>
+                </div>
+            </div>
+
+            <h1>طقم أواني فخارية فاخر</h1>
+
+            <div class="product-price-detail">
+                <span class="price-main">450 ج.م</span>
+                <span class="price-old-detail">650 ج.م</span>
+                <span class="price-save">وفر 200 ج.م</span>
+            </div>
+
+            <p class="product-desc">
+                طقم أواني فخارية يدوية الصنع بأيدي حرفيين مصريين. مصنوع من طين النيل الطبيعي 100%، 
+                مثالي للتقديم والطبخ. يتضمن 6 قطع بألوان طبيعية دافئة.
+            </p>
+
+            <div class="product-features">
+                <h3><i class="fas fa-check-circle" style="color: var(--accent);"></i> مميزات المنتج</h3>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> صناعة يدوية 100% مصرية</li>
+                    <li><i class="fas fa-check"></i> آمن للاستخدام في الفرن والميكروويف</li>
+                    <li><i class="fas fa-check"></i> طلاء طبيعي خالي من المواد الكيميائية</li>
+                    <li><i class="fas fa-check"></i> ضمان استرجاع 14 يوم</li>
+                </ul>
+            </div>
+
+            <div class="purchase-box">
+                <div class="qty-selector">
+                    <label>الكمية:</label>
+                    <div class="qty-controls">
+                        <button onclick="updateQty(-1)">-</button>
+                        <input type="number" value="1" min="1" max="10" id="qtyInput" readonly>
+                        <button onclick="updateQty(1)">+</button>
+                    </div>
+                </div>
+
+                <button class="add-cart-large" onclick="addToCart()">
+                    <i class="fas fa-shopping-bag"></i> أضف للسلة — 450 ج.م
+                </button>
+                <button class="wishlist-btn">
+                    <i class="far fa-heart"></i> أضف للمفضلة
+                </button>
+
+                <div class="delivery-info">
+                    <div class="delivery-row"><i class="fas fa-truck"></i> توصيل سريع 2-5 أيام</div>
+                    <div class="delivery-row"><i class="fas fa-undo"></i> استرجاع مجاني خلال 14 يوم</div>
+                    <div class="delivery-row"><i class="fas fa-shield-alt"></i> جودة مضمونة 100%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-tabs">
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="showTab('desc')">الوصف</button>
+            <button class="tab-btn" onclick="showTab('specs')">المواصفات</button>
+            <button class="tab-btn" onclick="showTab('reviews')">الآراء (128)</button>
+        </div>
+
+        <div class="tab-content active" id="tab-desc">
+            <div style="background: var(--white); padding: 2rem; border-radius: var(--radius); line-height: 2;">
+                <p>طقم الأواني الفخارية من دار ستور هو اختيارك المثالي لمنزل عصري يحتفي بالتراث المصري الأصيل.</p>
+                <br>
+                <h3 style="color: var(--primary); margin-bottom: 1rem;">تفاصيل التصنيع</h3>
+                <p>يتم صناعة كل قطعة يدوياً في ورش الحرفيين بقرى الفيوم.</p>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-specs">
+            <div style="background: var(--white); padding: 2rem; border-radius: var(--radius);">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 1rem; font-weight: 700; color: var(--primary); width: 200px;">المادة</td>
+                        <td style="padding: 1rem; color: var(--text-light);">طين النيل الطبيعي</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 1rem; font-weight: 700; color: var(--primary);">عدد القطع</td>
+                        <td style="padding: 1rem; color: var(--text-light);">6 قطع</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 1rem; font-weight: 700; color: var(--primary);">بلد الصنع</td>
+                        <td style="padding: 1rem; color: var(--text-light);">مصر</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-reviews">
+            <div class="reviews-list">
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" class="reviewer-avatar">
+                            <div>
+                                <div class="reviewer-name">محمد سمير</div>
+                                <div class="review-date">منذ 3 أيام</div>
+                            </div>
+                        </div>
+                        <div class="review-stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="review-text">منتج رائع جداً! الجودة فاقت توقعاتي.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="related-products">
+        <h2 class="section-title">منتجات مشابهة</h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=300&h=200&fit=crop" alt="">
+                <div class="product-card-info">
+                    <div class="product-card-name">طقم أدوات تقديم خشبي</div>
+                    <div class="product-card-price">190 ج.م</div>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?w=300&h=200&fit=crop" alt="">
+                <div class="product-card-info">
+                    <div class="product-card-name">طقم شموع عطرية</div>
+                    <div class="product-card-price">280 ج.م</div>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=300&h=200&fit=crop" alt="">
+                <div class="product-card-info">
+                    <div class="product-card-name">مزهرية ديكور</div>
+                    <div class="product-card-price">320 ج.م</div>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1584269600519-112d071b35e6?w=300&h=200&fit=crop" alt="">
+                <div class="product-card-info">
+                    <div class="product-card-name">صحن تقديم فخاري</div>
+                    <div class="product-card-price">150 ج.م</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2024 دار ستور. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script>
+        function changeImage(thumb) {
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+            document.getElementById('mainImage').src = thumb.src.replace('w=100', 'w=600').replace('h=100', 'h=500');
+        }
+
+        function updateQty(change) {
+            const input = document.getElementById('qtyInput');
+            let val = parseInt(input.value) + change;
+            if (val >= 1 && val <= 10) input.value = val;
+        }
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        let cart = JSON.parse(localStorage.getItem('darCart')) || [];
+
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        function addToCart() {
+            const qty = parseInt(document.getElementById('qtyInput').value);
+            const product = {
+                id: 1,
+                name: "طقم أواني فخارية فاخر",
+                price: 450,
+                qty: qty,
+                image: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=100&h=100&fit=crop"
+            };
+            const existingItem = cart.find(item => item.id === product.id);
+            if (existingItem) { existingItem.qty += qty; } else { cart.push(product); }
+            localStorage.setItem('darCart', JSON.stringify(cart));
+            updateCartCount();
+            const btn = document.querySelector('.add-cart-large');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> تمت الإضافة للسلة!';
+            btn.style.background = '#2d6a4f';
+            btn.style.color = 'white';
+            setTimeout(() => { btn.innerHTML = originalText; btn.style.background = ''; btn.style.color = ''; }, 2000);
+        }
+
+        updateCartCount();
+    </script>
+</body>
+</html>

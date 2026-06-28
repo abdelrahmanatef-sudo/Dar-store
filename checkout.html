@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إتمام الطلب | دار ستور</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #c9a96e;
+            --accent-light: #e8d5b5;
+            --text: #2d2d2d;
+            --text-light: #666;
+            --bg: #faf8f5;
+            --white: #ffffff;
+            --success: #2d6a4f;
+            --danger: #c0392b;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+            --radius: 16px;
+            --radius-sm: 8px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+        .checkout-header { background: var(--white); padding: 1.5rem 0; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; }
+        .checkout-header-content { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 1.1rem; }
+        .logo-text { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+        .back-link { color: var(--text-light); text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: color 0.3s; }
+        .back-link:hover { color: var(--accent); }
+
+        .checkout-container { max-width: 1200px; margin: 3rem auto; padding: 0 2rem; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 3rem; }
+        .checkout-section { background: var(--white); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+        .checkout-section h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--primary); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        .checkout-section h2 i { width: 36px; height: 36px; background: rgba(201,169,110,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 0.9rem; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; color: var(--primary); }
+        .form-group label .required { color: var(--danger); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 16px; border: 2px solid #e8e8e8; border-radius: var(--radius-sm); font-family: 'Cairo', sans-serif; font-size: 0.95rem; transition: all 0.3s; background: var(--bg); }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(201,169,110,0.1); background: var(--white); }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+
+        .payment-methods { display: flex; flex-direction: column; gap: 1rem; }
+        .payment-option { border: 2px solid #e8e8e8; border-radius: var(--radius-sm); padding: 1rem; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 1rem; }
+        .payment-option:hover { border-color: var(--accent-light); }
+        .payment-option.selected { border-color: var(--accent); background: rgba(201,169,110,0.05); }
+        .payment-option input { display: none; }
+        .payment-icon { width: 50px; height: 50px; background: var(--bg); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: var(--accent); }
+        .payment-info h4 { font-size: 0.95rem; color: var(--primary); margin-bottom: 2px; }
+        .payment-info p { font-size: 0.8rem; color: var(--text-light); }
+
+        .order-summary { background: var(--white); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); position: sticky; top: 100px; height: fit-content; }
+        .order-summary h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--primary); margin-bottom: 1.5rem; }
+        .summary-item { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; }
+        .summary-item.total { border-top: 2px solid var(--primary); border-bottom: none; margin-top: 0.5rem; padding-top: 1rem; font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+        .summary-item .price { font-weight: 700; }
+        .summary-item.total .price { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--accent); }
+
+        .cart-mini-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #f0f0f0; }
+        .cart-mini-img { width: 60px; height: 60px; border-radius: var(--radius-sm); object-fit: cover; background: var(--bg); }
+        .cart-mini-info { flex: 1; }
+        .cart-mini-name { font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-bottom: 4px; }
+        .cart-mini-qty { font-size: 0.8rem; color: var(--text-light); }
+        .cart-mini-price { font-weight: 700; color: var(--accent); font-size: 0.9rem; }
+
+        .checkout-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--accent), #b8945f); border: none; border-radius: 50px; color: var(--primary); font-family: 'Cairo', sans-serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 1.5rem; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,169,110,0.3); }
+        .checkout-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .secure-badge { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 1rem; font-size: 0.8rem; color: var(--text-light); }
+        .secure-badge i { color: var(--success); }
+
+        .checkout-steps { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; max-width: 600px; margin: 0 auto 2rem; }
+        .step { display: flex; align-items: center; gap: 8px; color: var(--text-light); font-size: 0.9rem; font-weight: 600; }
+        .step.active { color: var(--accent); }
+        .step.completed { color: var(--success); }
+        .step-num { width: 30px; height: 30px; border-radius: 50%; background: #e8e8e8; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+        .step.active .step-num { background: var(--accent); color: var(--primary); }
+        .step.completed .step-num { background: var(--success); color: white; }
+
+        .success-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 3000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .success-overlay.active { opacity: 1; visibility: visible; }
+        .success-box { background: var(--white); border-radius: var(--radius); padding: 3rem; text-align: center; max-width: 500px; width: 90%; transform: scale(0.9); transition: transform 0.3s; }
+        .success-overlay.active .success-box { transform: scale(1); }
+        .success-icon { width: 80px; height: 80px; background: rgba(45,106,79,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--success); font-size: 2rem; }
+        .success-box h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary); margin-bottom: 1rem; }
+        .success-box p { color: var(--text-light); margin-bottom: 0.5rem; }
+        .order-id { background: var(--bg); padding: 10px 20px; border-radius: var(--radius-sm); font-family: monospace; font-size: 1.1rem; color: var(--accent); display: inline-block; margin: 1rem 0; font-weight: 700; }
+
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+        @media (max-width: 768px) {
+            .checkout-container { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .order-summary { position: static; }
+        }
+    </style>
+</head>
+<body>
+    <header class="checkout-header">
+        <div class="checkout-header-content">
+            <a href="cart.html" class="back-link">
+                <i class="fas fa-arrow-right"></i> العودة للسلة
+            </a>
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i class="fas fa-home"></i></div>
+                <div class="logo-text">دار <span style="color: var(--accent);">ستور</span></div>
+            </a>
+            <div style="display: flex; gap: 1.5rem; align-items: center;">
+                <a href="index.html" style="color: var(--text); text-decoration: none; font-size: 1.2rem;"><i class="fas fa-home"></i></a>
+                <a href="cart.html" style="color: var(--text); text-decoration: none; font-size: 1.2rem; position: relative;">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span style="position: absolute; top: -8px; right: -8px; background: var(--danger); color: white; font-size: 0.7rem; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="checkout-steps">
+        <div class="step completed">
+            <div class="step-num"><i class="fas fa-check"></i></div>
+            <span>السلة</span>
+        </div>
+        <div class="step active">
+            <div class="step-num">2</div>
+            <span>الشحن والدفع</span>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <span>التأكيد</span>
+        </div>
+    </div>
+
+    <div class="checkout-container">
+        <div class="checkout-form">
+            <div class="checkout-section">
+                <h2><i class="fas fa-truck"></i> بيانات التوصيل</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>الاسم الأول <span class="required">*</span></label>
+                        <input type="text" id="firstName" placeholder="محمد" required>
+                    </div>
+                    <div class="form-group">
+                        <label>اسم العائلة <span class="required">*</span></label>
+                        <input type="text" id="lastName" placeholder="أحمد" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>رقم الهاتف <span class="required">*</span></label>
+                        <input type="tel" id="phone" placeholder="01xxxxxxxxxx" required>
+                    </div>
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" id="email" placeholder="example@email.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>المحافظة <span class="required">*</span></label>
+                    <select id="governorate" required>
+                        <option value="">اختر المحافظة</option>
+                        <option value="cairo">القاهرة</option>
+                        <option value="alex">الإسكندرية</option>
+                        <option value="giza">الجيزة</option>
+                        <option value="mansoura">المنصورة</option>
+                        <option value="tanta">طنطا</option>
+                        <option value="other">محافظة أخرى</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>العنوان بالتفصيل <span class="required">*</span></label>
+                    <textarea id="address" placeholder="الحي، الشارع، رقم العمارة، الشقة..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>ملاحظات إضافية</label>
+                    <textarea id="notes" placeholder="أي تعليمات خاصة بالتوصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="checkout-section">
+                <h2><i class="fas fa-credit-card"></i> طريقة الدفع</h2>
+                <div class="payment-methods">
+                    <label class="payment-option selected" onclick="selectPayment(this, 'cod')">
+                        <input type="radio" name="payment" value="cod" checked>
+                        <div class="payment-icon"><i class="fas fa-money-bill-wave"></i></div>
+                        <div class="payment-info">
+                            <h4>الدفع عند الاستلام</h4>
+                            <p>ادفع نقداً لموظف التوصيل عند استلام طلبك</p>
+                        </div>
+                    </label>
+                    <label class="payment-option" onclick="selectPayment(this, 'card')">
+                        <input type="radio" name="payment" value="card">
+                        <div class="payment-icon"><i class="fas fa-credit-card"></i></div>
+                        <div class="payment-info">
+                            <h4>بطاقة بنكية</h4>
+                            <p>الدفع باستخدام Visa أو Mastercard</p>
+                        </div>
+                    </label>
+                    <label class="payment-option" onclick="selectPayment(this, 'wallet')">
+                        <input type="radio" name="payment" value="wallet">
+                        <div class="payment-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="payment-info">
+                            <h4>محفظة إلكترونية</h4>
+                            <p>Vodafone Cash أو Fawry</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-summary">
+            <h2>ملخص الطلب</h2>
+            <div id="cartItemsContainer"></div>
+            <div class="summary-item">
+                <span>المجموع الجزئي</span>
+                <span class="price" id="subtotal">0 ج.م</span>
+            </div>
+            <div class="summary-item">
+                <span>رسوم التوصيل</span>
+                <span class="price" id="shipping">50 ج.م</span>
+            </div>
+            <div class="summary-item">
+                <span>الخصم</span>
+                <span class="price" style="color: var(--success);" id="discount">-0 ج.م</span>
+            </div>
+            <div class="summary-item total">
+                <span>الإجمالي</span>
+                <span class="price" id="total">0 ج.م</span>
+            </div>
+            <button class="checkout-btn" onclick="placeOrder()" id="placeOrderBtn">
+                <i class="fas fa-lock"></i> تأكيد الطلب
+            </button>
+            <div class="secure-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span>بياناتك آمنة ومشفرة بالكامل</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-overlay" id="successModal">
+        <div class="success-box">
+            <div class="success-icon"><i class="fas fa-check"></i></div>
+            <h2>تم تأكيد طلبك بنجاح!</h2>
+            <p>سنقوم بالتواصل معك قريباً لتأكيد التفاصيل</p>
+            <div class="order-id" id="orderId">#DS-2024-0001</div>
+            <p style="font-size: 0.9rem; margin-top: 1rem;">يمكنك متابعة حالة طلبك من خلال رقم الطلب</p>
+            <button class="checkout-btn" style="margin-top: 1.5rem;" onclick="window.location.href='index.html'">
+                <i class="fas fa-home"></i> العودة للرئيسية
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const cart = JSON.parse(localStorage.getItem('darCart')) || [
+            { id: 1, name: "طقم أواني فخارية فاخر", price: 450, qty: 1, image: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=100&h=100&fit=crop" },
+            { id: 2, name: "طقم شموع عطرية فاخر", price: 280, qty: 2, image: "https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?w=100&h=100&fit=crop" }
+        ];
+
+        function renderCart() {
+            const container = document.getElementById('cartItemsContainer');
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 2rem;">السلة فارغة</p>';
+                updateTotals(0);
+                return;
+            }
+            container.innerHTML = cart.map(item => `
+                <div class="cart-mini-item">
+                    <img src="${item.image}" alt="${item.name}" class="cart-mini-img">
+                    <div class="cart-mini-info">
+                        <div class="cart-mini-name">${item.name}</div>
+                        <div class="cart-mini-qty">الكمية: ${item.qty}</div>
+                    </div>
+                    <div class="cart-mini-price">${item.price * item.qty} ج.م</div>
+                </div>
+            `).join('');
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            updateTotals(subtotal);
+        }
+
+        function updateTotals(subtotal) {
+            const shipping = subtotal > 500 ? 0 : 50;
+            const discount = subtotal > 1000 ? Math.round(subtotal * 0.1) : 0;
+            const total = subtotal + shipping - discount;
+            document.getElementById('subtotal').textContent = subtotal.toLocaleString() + ' ج.م';
+            document.getElementById('shipping').textContent = shipping === 0 ? 'مجاني' : shipping + ' ج.م';
+            document.getElementById('discount').textContent = discount > 0 ? '-' + discount.toLocaleString() + ' ج.م' : '0 ج.م';
+            document.getElementById('total').textContent = total.toLocaleString() + ' ج.م';
+        }
+
+        function selectPayment(el, method) {
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function placeOrder() {
+            const btn = document.getElementById('placeOrderBtn');
+            const required = ['firstName', 'lastName', 'phone', 'governorate', 'address'];
+            let valid = true;
+            required.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el.value.trim()) { el.style.borderColor = 'var(--danger)'; valid = false; }
+                else { el.style.borderColor = '#e8e8e8'; }
+            });
+            if (!valid) { alert('يرجى ملء جميع الحقول المطلوبة'); return; }
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المعالجة...';
+            setTimeout(() => {
+                const orderNum = 'DS-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 9000) + 1000);
+                document.getElementById('orderId').textContent = '#' + orderNum;
+                document.getElementById('successModal').classList.add('active');
+                localStorage.removeItem('darCart');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> تأكيد الطلب';
+            }, 2000);
+        }
+
+        (function() {
+            const cart = JSON.parse(localStorage.getItem('darCart')) || [];
+            const count = cart.reduce((sum, item) => sum + item.qty, 0);
+            const cartCountEl = document.getElementById('cartCount');
+            if (cartCountEl) cartCountEl.textContent = count;
+        })();
+
+        renderCart();
+    </script>
+</body>
+</html>
