@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -529,6 +529,7 @@
             .products-grid-admin { grid-template-columns: 1fr; }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -902,11 +903,329 @@
         <i class="fas fa-plus"></i>
     </button>
 
-    <script>
-        function showSection(section) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            event.target.closest('.nav-item').classList.add('active');
+    <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+    // Admin auth check
+    auth.onAuthStateChanged(user => {
+        if (!user) {
+            // Not logged in, redirect to login
+            // window.location.href = 'login.html';
+            console.log('Not logged in - demo mode');
+        } else {
+            // Check if admin (you can customize this logic)
+            console.log('Logged in as:', user.email);
         }
-    </script>
+    });
+
+    // Navigation
+    function showSection(section) {
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        event.target.closest('.nav-item').classList.add('active');
+
+        // In a full implementation, this would show/hide different sections
+        // For now, we just update the active state
+        console.log('Switched to section:', section);
+    }
+
+    // Load dashboard stats
+    async function loadStats() {
+        try {
+            // Get orders count
+            const ordersSnapshot = await db.collection('orders').get();
+            const ordersCount = ordersSnapshot.size;
+
+            // Get total sales
+            let totalSales = 0;
+            ordersSnapshot.forEach(doc => {
+                const data = doc.data();
+                if (data.total) totalSales += data.total;
+            });
+
+            // Get customers count
+            const customersSnapshot = await db.collection('users').get();
+            const customersCount = customersSnapshot.size;
+
+            // Get products count
+            const productsSnapshot = await db.collection('products').get();
+            const productsCount = productsSnapshot.size;
+
+            // Update UI
+            updateStatCard(0, ordersCount.toLocaleString(), '+12.5%', true);
+            updateStatCard(1, totalSales.toLocaleString() + ' ج.م', '+8.2%', true);
+            updateStatCard(2, customersCount.toLocaleString(), '+5.3%', true);
+            updateStatCard(3, productsCount.toLocaleString(), '-2.1%', false);
+
+        } catch (error) {
+            console.error('Error loading stats:', error);
+        }
+    }
+
+    function updateStatCard(index, value, change, isUp) {
+        const statCards = document.querySelectorAll('.stat-info h3');
+        const changeEls = document.querySelectorAll('.stat-change');
+
+        if (statCards[index]) statCards[index].textContent = value;
+        if (changeEls[index]) {
+            changeEls[index].textContent = (isUp ? '▲ ' : '▼ ') + change;
+            changeEls[index].className = 'stat-change ' + (isUp ? 'up' : 'down');
+        }
+    }
+
+    // Load recent orders
+    async function loadOrders() {
+        try {
+            const snapshot = await db.collection('orders')
+                .orderBy('createdAt', 'desc')
+                .limit(10)
+                .get();
+
+            const tbody = document.querySelector('.data-table tbody');
+            if (!tbody) return;
+
+            if (snapshot.empty) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">لا توجد طلبات حالياً</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = snapshot.docs.map(doc => {
+                const order = doc.data();
+                const date = order.createdAt ? new Date(order.createdAt.toDate()).toLocaleDateString('ar-EG') : 'غير معروف';
+                const statusClass = 
+                    order.status === 'pending' ? 'status-pending' :
+                    order.status === 'processing' ? 'status-processing' :
+                    order.status === 'delivered' ? 'status-delivered' :
+                    order.status === 'cancelled' ? 'status-cancelled' : 'status-pending';
+                const statusText = 
+                    order.status === 'pending' ? 'قيد الانتظار' :
+                    order.status === 'processing' ? 'قيد التجهيز' :
+                    order.status === 'delivered' ? 'تم التسليم' :
+                    order.status === 'cancelled' ? 'ملغي' : 'قيد الانتظار';
+
+                const customerName = order.customer ? (order.customer.firstName + ' ' + order.customer.lastName) : 'غير معروف';
+                const firstLetter = customerName.charAt(0);
+                const itemsText = order.items ? order.items.map(item => item.name + ' × ' + item.qty).join(', ') : '';
+
+                return `
+                <tr>
+                    <td><span class="order-id">#${order.orderNumber || doc.id}</span></td>
+                    <td>
+                        <div class="customer-info">
+                            <div class="customer-avatar">${firstLetter}</div>
+                            <span>${customerName}</span>
+                        </div>
+                    </td>
+                    <td>${itemsText}</td>
+                    <td>${order.total || 0} ج.م</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>${date}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn view" onclick="viewOrder('${doc.id}')"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn edit" onclick="editOrder('${doc.id}')"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete" onclick="deleteOrder('${doc.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+
+            // Update badge count
+            const badge = document.querySelector('.nav-badge.danger');
+            if (badge) badge.textContent = snapshot.size;
+
+        } catch (error) {
+            console.error('Error loading orders:', error);
+        }
+    }
+
+    // Load top products
+    async function loadTopProducts() {
+        try {
+            const snapshot = await db.collection('products')
+                .where('active', '==', true)
+                .orderBy('sales', 'desc')
+                .limit(3)
+                .get();
+
+            const grid = document.querySelector('.products-grid-admin');
+            if (!grid) return;
+
+            if (snapshot.empty) {
+                // Keep default products
+                return;
+            }
+
+            grid.innerHTML = snapshot.docs.map(doc => {
+                const product = doc.data();
+                const stockStatus = 
+                    !product.stock || product.stock === 0 ? 'out' :
+                    product.stock < 10 ? 'low' : 'in';
+                const stockText = 
+                    stockStatus === 'out' ? 'نفذت الكمية' :
+                    stockStatus === 'low' ? `مخزون منخفض (${product.stock} قطع)` :
+                    `متوفر (${product.stock} قطعة)`;
+                const stockIcon = 
+                    stockStatus === 'out' ? 'fa-times-circle' :
+                    stockStatus === 'low' ? 'fa-exclamation-circle' : 'fa-check-circle';
+
+                return `
+                <div class="product-admin-card">
+                    <img src="${product.image}" class="product-admin-img" alt="${product.name}" loading="lazy">
+                    <div class="product-admin-info">
+                        <h4>${product.name}</h4>
+                        <div class="price">${product.price} ج.م</div>
+                        <div class="stock ${stockStatus}">
+                            <i class="fas ${stockIcon}"></i> ${stockText}
+                        </div>
+                    </div>
+                    <div class="product-admin-actions">
+                        <button class="btn-edit" onclick="editProduct('${doc.id}')"><i class="fas fa-edit"></i> تعديل</button>
+                        <button class="btn-delete" onclick="deleteProduct('${doc.id}')"><i class="fas fa-trash"></i> حذف</button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+        } catch (error) {
+            console.error('Error loading top products:', error);
+        }
+    }
+
+    // Order actions
+    async function viewOrder(orderId) {
+        try {
+            const doc = await db.collection('orders').doc(orderId).get();
+            if (doc.exists) {
+                const order = doc.data();
+                alert('تفاصيل الطلب: ' + JSON.stringify(order, null, 2));
+            }
+        } catch (error) {
+            console.error('Error viewing order:', error);
+        }
+    }
+
+    async function editOrder(orderId) {
+        const newStatus = prompt('أدخل الحالة الجديدة (pending/processing/delivered/cancelled):', 'processing');
+        if (!newStatus) return;
+
+        try {
+            await db.collection('orders').doc(orderId).update({
+                status: newStatus,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            loadOrders(); // Refresh
+            alert('تم تحديث حالة الطلب!');
+        } catch (error) {
+            console.error('Error updating order:', error);
+            alert('حدث خطأ أثناء التحديث');
+        }
+    }
+
+    async function deleteOrder(orderId) {
+        if (!confirm('هل أنت متأكد من حذف هذا الطلب؟')) return;
+
+        try {
+            await db.collection('orders').doc(orderId).delete();
+            loadOrders(); // Refresh
+            alert('تم حذف الطلب!');
+        } catch (error) {
+            console.error('Error deleting order:', error);
+            alert('حدث خطأ أثناء الحذف');
+        }
+    }
+
+    // Product actions
+    async function editProduct(productId) {
+        alert('سيتم فتح نموذج تعديل المنتج: ' + productId);
+    }
+
+    async function deleteProduct(productId) {
+        if (!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
+
+        try {
+            await db.collection('products').doc(productId).update({
+                active: false,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            loadTopProducts(); // Refresh
+            alert('تم حذف المنتج!');
+        } catch (error) {
+            console.error('Error deleting product:', error);
+            alert('حدث خطأ أثناء الحذف');
+        }
+    }
+
+    // Add product button
+    document.querySelector('.add-product-btn')?.addEventListener('click', () => {
+        const name = prompt('اسم المنتج:');
+        if (!name) return;
+        const price = parseFloat(prompt('السعر:'));
+        const category = prompt('الفئة:');
+        const image = prompt('رابط الصورة:');
+
+        db.collection('products').add({
+            name: name,
+            price: price,
+            category: category,
+            image: image || 'https://via.placeholder.com/300x180',
+            active: true,
+            stock: 10,
+            sales: 0,
+            rating: 4.5,
+            reviews: 0,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+            alert('تم إضافة المنتج!');
+            loadTopProducts();
+        }).catch(err => {
+            console.error('Error adding product:', err);
+            alert('حدث خطأ أثناء الإضافة');
+        });
+    });
+
+    // Load monthly sales data for chart
+    async function loadSalesChart() {
+        try {
+            const snapshot = await db.collection('orders')
+                .where('status', 'in', ['delivered', 'processing'])
+                .get();
+
+            // Aggregate by month
+            const monthlySales = {};
+            const monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                if (data.createdAt) {
+                    const date = data.createdAt.toDate();
+                    const monthKey = monthNames[date.getMonth()];
+                    if (!monthlySales[monthKey]) monthlySales[monthKey] = 0;
+                    monthlySales[monthKey] += data.total || 0;
+                }
+            });
+
+            // Update chart bars if data exists
+            const bars = document.querySelectorAll('.bar');
+            const barValues = document.querySelectorAll('.bar-value');
+
+            // For demo, we'll keep the static chart but you can update it dynamically
+            console.log('Monthly sales:', monthlySales);
+
+        } catch (error) {
+            console.error('Error loading sales chart:', error);
+        }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        loadStats();
+        loadOrders();
+        loadTopProducts();
+        loadSalesChart();
+    });
+</script>
 </body>
 </html>
