@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -567,6 +567,7 @@
             .newsletter-form { flex-direction: column; }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -762,128 +763,55 @@
         </div>
     </footer>
 
-    <script>
-        // Sample Products Data
-        const products = [
-            {
-                id: 1,
-                name: "طقم أواني فخارية فاخر",
-                category: "أواني فخارية",
-                price: 450,
-                oldPrice: 650,
-                image: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=300&h=250&fit=crop",
-                rating: 4.9,
-                reviews: 128,
-                badge: "bestseller"
-            },
-            {
-                id: 2,
-                name: "طقم أدوات تقديم خشبي",
-                category: "أدوات تقديم",
-                price: 190,
-                oldPrice: null,
-                image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=300&h=250&fit=crop",
-                rating: 4.7,
-                reviews: 85,
-                badge: "new"
-            },
-            {
-                id: 3,
-                name: "طقم شموع عطرية فاخر",
-                category: "شموع عطرية",
-                price: 280,
-                oldPrice: 350,
-                image: "https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?w=300&h=250&fit=crop",
-                rating: 4.8,
-                reviews: 96,
-                badge: "sale"
-            },
-            {
-                id: 4,
-                name: "مزهرية ديكور يدوية",
-                category: "ديكور منزلي",
-                price: 320,
-                oldPrice: null,
-                image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=300&h=250&fit=crop",
-                rating: 4.6,
-                reviews: 64,
-                badge: null
-            },
-            {
-                id: 5,
-                name: "صحن تقديم فخاري كبير",
-                category: "أواني فخارية",
-                price: 150,
-                oldPrice: 200,
-                image: "https://images.unsplash.com/photo-1584269600519-112d071b35e6?w=300&h=250&fit=crop",
-                rating: 4.5,
-                reviews: 42,
-                badge: "sale"
-            },
-            {
-                id: 6,
-                name: "طقم فناجين قهوة تراثي",
-                category: "أواني فخارية",
-                price: 380,
-                oldPrice: null,
-                image: "https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=300&h=250&fit=crop",
-                rating: 4.9,
-                reviews: 156,
-                badge: "bestseller"
-            },
-            {
-                id: 7,
-                name: "سجادة يدوية صغيرة",
-                category: "ديكور منزلي",
-                price: 550,
-                oldPrice: 700,
-                image: "https://images.unsplash.com/photo-1575414003591-ece8d0416c7a?w=300&h=250&fit=crop",
-                rating: 4.7,
-                reviews: 73,
-                badge: "sale"
-            },
-            {
-                id: 8,
-                name: "إطار صور خشبي نحتي",
-                category: "ديكور منزلي",
-                price: 120,
-                oldPrice: null,
-                image: "https://images.unsplash.com/photo-1513519245088-0e12902e35a6?w=300&h=250&fit=crop",
-                rating: 4.4,
-                reviews: 38,
-                badge: "new"
-            }
-        ];
+    <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+    // Cart functionality (localStorage - works offline)
+    let cart = JSON.parse(localStorage.getItem('darCart')) || [];
 
-        // Cart functionality
-        let cart = JSON.parse(localStorage.getItem('darCart')) || [];
+    function updateCartCount() {
+        const count = cart.reduce((sum, item) => sum + item.qty, 0);
+        const cartCountEl = document.getElementById('cartCount');
+        if (cartCountEl) cartCountEl.textContent = count;
+    }
 
-        function updateCartCount() {
-            const count = cart.reduce((sum, item) => sum + item.qty, 0);
-            document.getElementById('cartCount').textContent = count;
+    function addToCart(productId, productData = null) {
+        // If productData passed directly (from Firestore), use it
+        // Otherwise find from rendered products
+        let product;
+        if (productData) {
+            product = productData;
+        } else {
+            // Try to find from window.products array
+            product = window.products && window.products.find(p => p.id === productId);
         }
 
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            const existingItem = cart.find(item => item.id === productId);
+        if (!product) {
+            console.error('Product not found:', productId);
+            return;
+        }
 
-            if (existingItem) {
-                existingItem.qty += 1;
-            } else {
-                cart.push({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    qty: 1,
-                    image: product.image
-                });
-            }
+        const existingItem = cart.find(item => item.id === productId);
+        if (existingItem) {
+            existingItem.qty += 1;
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                qty: 1,
+                image: product.image
+            });
+        }
 
-            localStorage.setItem('darCart', JSON.stringify(cart));
-            updateCartCount();
+        localStorage.setItem('darCart', JSON.stringify(cart));
+        updateCartCount();
 
-            // Show notification
-            const btn = event.target.closest('.add-to-cart-btn');
+        // Show notification
+        const btn = event.target.closest('.add-to-cart-btn');
+        if (btn) {
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-check"></i> تمت الإضافة!';
             btn.style.background = 'var(--success)';
@@ -894,53 +822,155 @@
                 btn.style.color = '';
             }, 1500);
         }
+    }
 
-        function renderProducts() {
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = products.map(product => `
+    // Load products from Firestore
+    async function loadProducts() {
+        const grid = document.getElementById('productsGrid');
+        if (!grid) return;
+
+        // Show loading state
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--accent);"></i><p style="margin-top: 1rem; color: var(--text-light);">جاري تحميل المنتجات...</p></div>';
+
+        try {
+            const snapshot = await db.collection('products').where('active', '==', true).orderBy('createdAt', 'desc').get();
+
+            if (snapshot.empty) {
+                // Fallback to default products if no products in database
+                renderDefaultProducts();
+                return;
+            }
+
+            window.products = [];
+            const productsHTML = snapshot.docs.map(doc => {
+                const product = { id: doc.id, ...doc.data() };
+                window.products.push(product);
+
+                const badgeHTML = product.badge ? `<span class="product-badge badge-${product.badge}">${
+                    product.badge === 'sale' ? 'خصم' :
+                    product.badge === 'new' ? 'جديد' :
+                    product.badge === 'bestseller' ? 'الأكثر مبيعاً' : ''
+                }</span>` : '';
+
+                const oldPriceHTML = product.oldPrice ? `<span class="price-old">${product.oldPrice} ج.م</span>` : '';
+
+                return `
                 <div class="product-card">
-                    ${product.badge ? `<span class="product-badge badge-${product.badge}">${
-                        product.badge === 'sale' ? 'خصم' :
-                        product.badge === 'new' ? 'جديد' :
-                        product.badge === 'bestseller' ? 'الأكثر مبيعاً' : ''
-                    }</span>` : ''}
-                    <button class="wishlist-icon" onclick="toggleWishlist(${product.id})">
+                    ${badgeHTML}
+                    <button class="wishlist-icon" onclick="toggleWishlist('${product.id}')">
                         <i class="far fa-heart"></i>
                     </button>
-                    <a href="product.html">
-                        <img src="${product.image}" alt="${product.name}">
+                    <a href="product.html?id=${product.id}">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy">
                     </a>
                     <div class="product-card-info">
                         <div class="product-card-category">${product.category}</div>
-                        <a href="product.html" class="product-card-name">${product.name}</a>
+                        <a href="product.html?id=${product.id}" class="product-card-name">${product.name}</a>
                         <div class="product-card-rating">
-                            ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}
-                            <span style="color: var(--text-light); font-size: 0.8rem;">(${product.reviews})</span>
+                            ${'★'.repeat(Math.floor(product.rating || 4))}${'☆'.repeat(5 - Math.floor(product.rating || 4))}
+                            <span style="color: var(--text-light); font-size: 0.8rem;">(${product.reviews || 0})</span>
                         </div>
                         <div class="product-card-price">
                             <span class="price-current">${product.price} ج.م</span>
-                            ${product.oldPrice ? `<span class="price-old">${product.oldPrice} ج.م</span>` : ''}
+                            ${oldPriceHTML}
                         </div>
-                        <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+                        <button class="add-to-cart-btn" onclick='addToCart("${product.id}", ${JSON.stringify(product).replace(/'/g, "&#39;")})'>
                             <i class="fas fa-shopping-bag"></i>
                             أضف للسلة
                         </button>
                     </div>
                 </div>
-            `).join('');
-        }
+                `;
+            }).join('');
 
-        function toggleWishlist(productId) {
-            event.stopPropagation();
-            const icon = event.target.closest('.wishlist-icon').querySelector('i');
-            icon.classList.toggle('far');
-            icon.classList.toggle('fas');
-            icon.style.color = icon.classList.contains('fas') ? 'var(--danger)' : '';
-        }
+            grid.innerHTML = productsHTML;
 
-        // Initialize
-        renderProducts();
+        } catch (error) {
+            console.error('Error loading products:', error);
+            // Fallback to default products
+            renderDefaultProducts();
+        }
+    }
+
+    // Fallback default products (if Firestore fails or empty)
+    function renderDefaultProducts() {
+        const defaultProducts = [
+            { id: '1', name: "طقم أواني فخارية فاخر", category: "أواني فخارية", price: 450, oldPrice: 650, image: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=300&h=250&fit=crop", rating: 4.9, reviews: 128, badge: "bestseller" },
+            { id: '2', name: "طقم أدوات تقديم خشبي", category: "أدوات تقديم", price: 190, oldPrice: null, image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=300&h=250&fit=crop", rating: 4.7, reviews: 85, badge: "new" },
+            { id: '3', name: "طقم شموع عطرية فاخر", category: "شموع عطرية", price: 280, oldPrice: 350, image: "https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?w=300&h=250&fit=crop", rating: 4.8, reviews: 96, badge: "sale" },
+            { id: '4', name: "مزهرية ديكور يدوية", category: "ديكور منزلي", price: 320, oldPrice: null, image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=300&h=250&fit=crop", rating: 4.6, reviews: 64, badge: null },
+            { id: '5', name: "صحن تقديم فخاري كبير", category: "أواني فخارية", price: 150, oldPrice: 200, image: "https://images.unsplash.com/photo-1584269600519-112d071b35e6?w=300&h=250&fit=crop", rating: 4.5, reviews: 42, badge: "sale" },
+            { id: '6', name: "طقم فناجين قهوة تراثي", category: "أواني فخارية", price: 380, oldPrice: null, image: "https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=300&h=250&fit=crop", rating: 4.9, reviews: 156, badge: "bestseller" },
+            { id: '7', name: "سجادة يدوية صغيرة", category: "ديكور منزلي", price: 550, oldPrice: 700, image: "https://images.unsplash.com/photo-1575414003591-ece8d0416c7a?w=300&h=250&fit=crop", rating: 4.7, reviews: 73, badge: "sale" },
+            { id: '8', name: "إطار صور خشبي نحتي", category: "ديكور منزلي", price: 120, oldPrice: null, image: "https://images.unsplash.com/photo-1513519245088-0e12902e35a6?w=300&h=250&fit=crop", rating: 4.4, reviews: 38, badge: "new" }
+        ];
+
+        window.products = defaultProducts;
+        const grid = document.getElementById('productsGrid');
+
+        grid.innerHTML = defaultProducts.map(product => `
+            <div class="product-card">
+                ${product.badge ? `<span class="product-badge badge-${product.badge}">${
+                    product.badge === 'sale' ? 'خصم' :
+                    product.badge === 'new' ? 'جديد' :
+                    product.badge === 'bestseller' ? 'الأكثر مبيعاً' : ''
+                }</span>` : ''}
+                <button class="wishlist-icon" onclick="toggleWishlist('${product.id}')">
+                    <i class="far fa-heart"></i>
+                </button>
+                <a href="product.html?id=${product.id}">
+                    <img src="${product.image}" alt="${product.name}">
+                </a>
+                <div class="product-card-info">
+                    <div class="product-card-category">${product.category}</div>
+                    <a href="product.html?id=${product.id}" class="product-card-name">${product.name}</a>
+                    <div class="product-card-rating">
+                        ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}
+                        <span style="color: var(--text-light); font-size: 0.8rem;">(${product.reviews})</span>
+                    </div>
+                    <div class="product-card-price">
+                        <span class="price-current">${product.price} ج.م</span>
+                        ${product.oldPrice ? `<span class="price-old">${product.oldPrice} ج.م</span>` : ''}
+                    </div>
+                    <button class="add-to-cart-btn" onclick='addToCart("${product.id}", ${JSON.stringify(product).replace(/'/g, "&#39;")})'>
+                        <i class="fas fa-shopping-bag"></i>
+                        أضف للسلة
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function toggleWishlist(productId) {
+        event.stopPropagation();
+        const icon = event.target.closest('.wishlist-icon').querySelector('i');
+        icon.classList.toggle('far');
+        icon.classList.toggle('fas');
+        icon.style.color = icon.classList.contains('fas') ? 'var(--danger)' : '';
+
+        // Save to Firestore if user is logged in
+        const user = auth.currentUser;
+        if (user) {
+            db.collection('users').doc(user.uid).collection('wishlist').doc(productId).set({
+                productId: productId,
+                addedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+    }
+
+    // Check auth state
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            // User is signed in - update UI if needed
+            console.log('User signed in:', user.email);
+        }
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        loadProducts();
         updateCartCount();
-    </script>
+    });
+</script>
 </body>
 </html>
