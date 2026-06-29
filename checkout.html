@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -102,6 +102,7 @@
             .order-summary { position: static; }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
     <header class="checkout-header">
@@ -257,78 +258,202 @@
         </div>
     </div>
 
-    <script>
-        const cart = JSON.parse(localStorage.getItem('darCart')) || [
-            { id: 1, name: "طقم أواني فخارية فاخر", price: 450, qty: 1, image: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=100&h=100&fit=crop" },
-            { id: 2, name: "طقم شموع عطرية فاخر", price: 280, qty: 2, image: "https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?w=100&h=100&fit=crop" }
-        ];
+    <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+    const cart = JSON.parse(localStorage.getItem('darCart')) || [];
+    let currentUser = null;
 
-        function renderCart() {
-            const container = document.getElementById('cartItemsContainer');
-            if (cart.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 2rem;">السلة فارغة</p>';
-                updateTotals(0);
-                return;
-            }
-            container.innerHTML = cart.map(item => `
-                <div class="cart-mini-item">
-                    <img src="${item.image}" alt="${item.name}" class="cart-mini-img">
-                    <div class="cart-mini-info">
-                        <div class="cart-mini-name">${item.name}</div>
-                        <div class="cart-mini-qty">الكمية: ${item.qty}</div>
-                    </div>
-                    <div class="cart-mini-price">${item.price * item.qty} ج.م</div>
-                </div>
-            `).join('');
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            updateTotals(subtotal);
+    // Check auth state
+    auth.onAuthStateChanged(user => {
+        currentUser = user;
+        if (user) {
+            // Auto-fill user data if available
+            db.collection('users').doc(user.uid).get().then(doc => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data.firstName) document.getElementById('firstName').value = data.firstName;
+                    if (data.lastName) document.getElementById('lastName').value = data.lastName;
+                    if (data.phone) document.getElementById('phone').value = data.phone;
+                    if (data.email) document.getElementById('email').value = data.email;
+                    if (data.governorate) document.getElementById('governorate').value = data.governorate;
+                    if (data.address) document.getElementById('address').value = data.address;
+                }
+            });
+        }
+    });
+
+    function renderCart() {
+        const container = document.getElementById('cartItemsContainer');
+        if (!container) return;
+
+        if (cart.length === 0) {
+            container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 2rem;">السلة فارغة</p>';
+            updateTotals(0);
+            return;
         }
 
-        function updateTotals(subtotal) {
+        container.innerHTML = cart.map(item => `
+            <div class="cart-mini-item">
+                <img src="${item.image}" alt="${item.name}" class="cart-mini-img">
+                <div class="cart-mini-info">
+                    <div class="cart-mini-name">${item.name}</div>
+                    <div class="cart-mini-qty">الكمية: ${item.qty}</div>
+                </div>
+                <div class="cart-mini-price">${item.price * item.qty} ج.م</div>
+            </div>
+        `).join('');
+
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        updateTotals(subtotal);
+    }
+
+    function updateTotals(subtotal) {
+        const shipping = subtotal > 500 ? 0 : 50;
+        const discount = subtotal > 1000 ? Math.round(subtotal * 0.1) : 0;
+        const total = subtotal + shipping - discount;
+
+        const subtotalEl = document.getElementById('subtotal');
+        const shippingEl = document.getElementById('shipping');
+        const discountEl = document.getElementById('discount');
+        const totalEl = document.getElementById('total');
+
+        if (subtotalEl) subtotalEl.textContent = subtotal.toLocaleString() + ' ج.م';
+        if (shippingEl) shippingEl.textContent = shipping === 0 ? 'مجاني' : shipping + ' ج.م';
+        if (discountEl) discountEl.textContent = discount > 0 ? '-' + discount.toLocaleString() + ' ج.م' : '0 ج.م';
+        if (totalEl) totalEl.textContent = total.toLocaleString() + ' ج.م';
+    }
+
+    function selectPayment(el, method) {
+        document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    async function placeOrder() {
+        const btn = document.getElementById('placeOrderBtn');
+        const required = ['firstName', 'lastName', 'phone', 'governorate', 'address'];
+        let valid = true;
+
+        required.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (!el.value.trim()) { 
+                el.style.borderColor = 'var(--danger)'; 
+                valid = false; 
+            } else { 
+                el.style.borderColor = '#e8e8e8'; 
+            }
+        });
+
+        if (!valid) { 
+            alert('يرجى ملء جميع الحقول المطلوبة'); 
+            return; 
+        }
+
+        if (cart.length === 0) {
+            alert('السلة فارغة!');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المعالجة...';
+
+        try {
+            // Calculate totals
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             const shipping = subtotal > 500 ? 0 : 50;
             const discount = subtotal > 1000 ? Math.round(subtotal * 0.1) : 0;
             const total = subtotal + shipping - discount;
-            document.getElementById('subtotal').textContent = subtotal.toLocaleString() + ' ج.م';
-            document.getElementById('shipping').textContent = shipping === 0 ? 'مجاني' : shipping + ' ج.م';
-            document.getElementById('discount').textContent = discount > 0 ? '-' + discount.toLocaleString() + ' ج.م' : '0 ج.م';
-            document.getElementById('total').textContent = total.toLocaleString() + ' ج.م';
+
+            // Get payment method
+            const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'cod';
+
+            // Create order object
+            const orderData = {
+                orderNumber: 'DS-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 9000) + 1000),
+                customer: {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value || null,
+                    governorate: document.getElementById('governorate').value,
+                    address: document.getElementById('address').value,
+                    notes: document.getElementById('notes').value || null
+                },
+                items: cart,
+                subtotal: subtotal,
+                shipping: shipping,
+                discount: discount,
+                total: total,
+                paymentMethod: paymentMethod,
+                status: 'pending',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            // Add user ID if logged in
+            if (currentUser) {
+                orderData.userId = currentUser.uid;
+            }
+
+            // Save to Firestore
+            const orderRef = await db.collection('orders').add(orderData);
+
+            // Update product stock (optional)
+            for (const item of cart) {
+                if (item.id) {
+                    const productRef = db.collection('products').doc(item.id);
+                    const productDoc = await productRef.get();
+                    if (productDoc.exists) {
+                        const currentStock = productDoc.data().stock || 0;
+                        if (currentStock >= item.qty) {
+                            await productRef.update({
+                                stock: currentStock - item.qty,
+                                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                            });
+                        }
+                    }
+                }
+            }
+
+            // Show success
+            document.getElementById('orderId').textContent = '#' + orderData.orderNumber;
+            document.getElementById('successModal').classList.add('active');
+
+            // Clear cart
+            localStorage.removeItem('darCart');
+
+            // Save order to user's history if logged in
+            if (currentUser) {
+                await db.collection('users').doc(currentUser.uid).collection('orders').doc(orderRef.id).set({
+                    orderId: orderRef.id,
+                    orderNumber: orderData.orderNumber,
+                    total: total,
+                    status: 'pending',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }
+
+        } catch (error) {
+            console.error('Error placing order:', error);
+            alert('حدث خطأ أثناء إتمام الطلب. يرجى المحاولة مرة أخرى.');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-lock"></i> تأكيد الطلب';
         }
+    }
 
-        function selectPayment(el, method) {
-            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
-            el.classList.add('selected');
-        }
+    // Update cart count in header
+    (function() {
+        const cart = JSON.parse(localStorage.getItem('darCart')) || [];
+        const count = cart.reduce((sum, item) => sum + item.qty, 0);
+        const cartCountEl = document.getElementById('cartCount');
+        if (cartCountEl) cartCountEl.textContent = count;
+    })();
 
-        function placeOrder() {
-            const btn = document.getElementById('placeOrderBtn');
-            const required = ['firstName', 'lastName', 'phone', 'governorate', 'address'];
-            let valid = true;
-            required.forEach(id => {
-                const el = document.getElementById(id);
-                if (!el.value.trim()) { el.style.borderColor = 'var(--danger)'; valid = false; }
-                else { el.style.borderColor = '#e8e8e8'; }
-            });
-            if (!valid) { alert('يرجى ملء جميع الحقول المطلوبة'); return; }
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المعالجة...';
-            setTimeout(() => {
-                const orderNum = 'DS-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 9000) + 1000);
-                document.getElementById('orderId').textContent = '#' + orderNum;
-                document.getElementById('successModal').classList.add('active');
-                localStorage.removeItem('darCart');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-lock"></i> تأكيد الطلب';
-            }, 2000);
-        }
-
-        (function() {
-            const cart = JSON.parse(localStorage.getItem('darCart')) || [];
-            const count = cart.reduce((sum, item) => sum + item.qty, 0);
-            const cartCountEl = document.getElementById('cartCount');
-            if (cartCountEl) cartCountEl.textContent = count;
-        })();
-
-        renderCart();
-    </script>
+    renderCart();
+</script>
 </body>
 </html>
