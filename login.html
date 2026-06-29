@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -224,6 +224,7 @@
             .auth-image { display: none; }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -300,29 +301,193 @@
         </div>
     </div>
 
-    <script>
-        function switchTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
-            
-            if (tab === 'login') {
-                document.querySelectorAll('.tab')[0].classList.add('active');
-                document.getElementById('loginPanel').classList.add('active');
-            } else {
-                document.querySelectorAll('.tab')[1].classList.add('active');
-                document.getElementById('registerPanel').classList.add('active');
+    <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+    // Google Auth Provider
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+    // Facebook Auth Provider  
+    const facebookProvider = new firebase.auth.FacebookAuthProvider();
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+
+        if (tab === 'login') {
+            document.querySelectorAll('.tab')[0].classList.add('active');
+            document.getElementById('loginPanel').classList.add('active');
+        } else {
+            document.querySelectorAll('.tab')[1].classList.add('active');
+            document.getElementById('registerPanel').classList.add('active');
+        }
+    }
+
+    async function handleLogin() {
+        const email = document.querySelector('#loginPanel input[type="text"]').value;
+        const password = document.querySelector('#loginPanel input[type="password"]').value;
+
+        try {
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+            const user = userCredential.user;
+
+            // Save user data to Firestore
+            await db.collection('users').doc(user.uid).set({
+                email: user.email,
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+
+            showSuccess('تم تسجيل الدخول بنجاح!');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        } catch (error) {
+            console.error('Login error:', error);
+            let errorMsg = 'حدث خطأ أثناء تسجيل الدخول';
+            switch(error.code) {
+                case 'auth/user-not-found':
+                    errorMsg = 'البريد الإلكتروني غير مسجل';
+                    break;
+                case 'auth/wrong-password':
+                    errorMsg = 'كلمة المرور غير صحيحة';
+                    break;
+                case 'auth/invalid-email':
+                    errorMsg = 'البريد الإلكتروني غير صالح';
+                    break;
+                case 'auth/too-many-requests':
+                    errorMsg = 'عدد محاولات كبير، يرجى المحاولة لاحقاً';
+                    break;
             }
+            showError(errorMsg);
         }
+    }
 
-        function handleLogin() {
-            alert('تم تسجيل الدخول بنجاح! (في النظام الفعلي هيتم التحقق من البيانات)');
+    async function handleRegister() {
+        const inputs = document.querySelectorAll('#registerPanel input');
+        const fullName = inputs[0].value;
+        const email = inputs[1].value;
+        const phone = inputs[2].value;
+        const password = inputs[3].value;
+
+        try {
+            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+            const user = userCredential.user;
+
+            // Update profile
+            await user.updateProfile({
+                displayName: fullName
+            });
+
+            // Save user data to Firestore
+            await db.collection('users').doc(user.uid).set({
+                fullName: fullName,
+                email: email,
+                phone: phone,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            showSuccess('تم إنشاء الحساب بنجاح!');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        } catch (error) {
+            console.error('Register error:', error);
+            let errorMsg = 'حدث خطأ أثناء إنشاء الحساب';
+            switch(error.code) {
+                case 'auth/email-already-in-use':
+                    errorMsg = 'البريد الإلكتروني مستخدم بالفعل';
+                    break;
+                case 'auth/invalid-email':
+                    errorMsg = 'البريد الإلكتروني غير صالح';
+                    break;
+                case 'auth/weak-password':
+                    errorMsg = 'كلمة المرور ضعيفة (6 أحرف على الأقل)';
+                    break;
+            }
+            showError(errorMsg);
+        }
+    }
+
+    // Social login handlers
+    async function signInWithGoogle() {
+        try {
+            const result = await auth.signInWithPopup(googleProvider);
+            const user = result.user;
+
+            // Save/update user in Firestore
+            await db.collection('users').doc(user.uid).set({
+                fullName: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL,
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+
+            showSuccess('تم تسجيل الدخول بنجاح!');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        } catch (error) {
+            console.error('Google sign in error:', error);
+            showError('حدث خطأ أثناء تسجيل الدخول بـ Google');
+        }
+    }
+
+    async function signInWithFacebook() {
+        try {
+            const result = await auth.signInWithPopup(facebookProvider);
+            const user = result.user;
+
+            await db.collection('users').doc(user.uid).set({
+                fullName: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL,
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+
+            showSuccess('تم تسجيل الدخول بنجاح!');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        } catch (error) {
+            console.error('Facebook sign in error:', error);
+            showError('حدث خطأ أثناء تسجيل الدخول بـ Facebook');
+        }
+    }
+
+    // Add click handlers to social buttons
+    document.addEventListener('DOMContentLoaded', () => {
+        const socialBtns = document.querySelectorAll('.social-btn');
+        if (socialBtns[0]) socialBtns[0].addEventListener('click', signInWithGoogle);
+        if (socialBtns[1]) socialBtns[1].addEventListener('click', signInWithFacebook);
+    });
+
+    function showSuccess(msg) {
+        // Create toast notification
+        const toast = document.createElement('div');
+        toast.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--success); color: white; padding: 1rem 2rem; border-radius: 50px; z-index: 9999; font-weight: 700; box-shadow: 0 4px 20px rgba(0,0,0,0.2);';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    function showError(msg) {
+        const toast = document.createElement('div');
+        toast.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--danger); color: white; padding: 1rem 2rem; border-radius: 50px; z-index: 9999; font-weight: 700; box-shadow: 0 4px 20px rgba(0,0,0,0.2);';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Check if already logged in
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            // Already logged in, redirect to home
             window.location.href = 'index.html';
         }
-
-        function handleRegister() {
-            alert('تم إنشاء الحساب بنجاح! (في النظام الفعلي هيتم حفظ البيانات)');
-            window.location.href = 'index.html';
-        }
-    </script>
+    });
+</script>
 </body>
 </html>
